@@ -2,141 +2,78 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SAHAYA - Login</title>
-
+<title>SAHAYA</title>
+<link rel="stylesheet" href="style.css">
 <style>
   body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #f9fbff;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    background: #f4f6f8;
+    font-family: Arial, sans-serif;
   }
 
   .container {
-    width: 360px;
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
     text-align: center;
   }
 
-  h1 {
-    margin-bottom: 25px;
-    letter-spacing: 3px;
-    color: #020f3b;
-  }
-
-  .role-btn {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 12px;
-    border: 2px solid #020f3b;
-    background: #ffffff;
-    font-size: 16px;
+  .header {
+    font-size: 48px;
     font-weight: bold;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: 0.2s;
+    margin-bottom: 40px;
   }
 
-  .role-btn:hover,
-  .role-btn.active {
-    background: #020f3b;
-    color: #ffffff;
-  }
-
-  input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 12px;
-    border-radius: 6px;
-    border: 2px solid #020f3b;
-    outline: none;
-  }
-
-  button.login-btn {
-    width: 100%;
-    margin-top: 20px;
-    padding: 12px;
+  .btn {
+    width: 260px;
+    padding: 15px;
+    margin: 12px 0;
+    font-size: 18px;
     border: none;
-    background: #020f3b;
-    color: #ffffff;
-    font-size: 16px;
     border-radius: 8px;
     cursor: pointer;
+    background: #1f2937;
+    color: white;
   }
 
-  button.login-btn:hover {
-    background: #001a8f;
+  .btn:hover {
+    background: #374151;
   }
 
-  #msg {
-    margin-top: 12px;
-    color: red;
-    font-size: 14px;
-  }
+  .button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 </style>
 </head>
 
 <body>
-
 <div class="container">
-  <h1>SAHAYA</h1>
-
-  <button class="role-btn" onclick="setRole('user', this)">👤 USER</button>
-  <button class="role-btn" onclick="setRole('provider', this)">🧑‍🔧 SERVICE PROVIDER</button>
-  <button class="role-btn" onclick="setRole('admin', this)">🛡️ ADMIN</button>
-
-  <input type="email" id="email" placeholder="Email" required>
-  <input type="password" id="password" placeholder="Password" required>
-
-  <button class="login-btn" onclick="login()">LOGIN</button>
-
-  <p id="msg"></p>
+  <div class="header">SAHAYA</div>
+  <div class="button-group">
+    <button class="btn" onclick="goTo('admin')">👮 ADMIN</button>
+  </div>
+  <div class="button-group">
+    <button class="btn" onclick="goTo('user')">👤 USER</button>
+  </div>
+  <div class="button-group">
+    <button class="btn" onclick="goTo('provider')">🛠️ SERVICE PROVIDER</button>
+  </div>
 </div>
 
 <script>
-let selectedRole = "";
-
-function setRole(role, btn) {
-  selectedRole = role;
-  document.querySelectorAll(".role-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-}
-
-async function login() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  if (!selectedRole) {
-    document.getElementById("msg").innerText = "Please select a role";
-    return;
-  }
-
-  const res = await fetch("http://localhost:3000/auth/login", {
-    method: "POST",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({ email, password, role: selectedRole })
-  });
-
-  const data = await res.json();
-
-  if (data.token) {
-    localStorage.setItem("token", data.token);
-
-    if (selectedRole === "user") window.location = "user.html";
-    else if (selectedRole === "provider") window.location = "provider.html";
-    else window.location = "admin.html";
-
-  } else {
-    document.getElementById("msg").innerText = data.error || "Login failed";
+function goTo(role) {
+  if (role === 'admin') {
+    window.location = 'admin.html';
+  } else if (role === 'user') {
+    window.location = 'user.html';
+  } else if (role === 'provider') {
+    window.location = 'provider.html';
   }
 }
 </script>
-
 </body>
 </html>
