@@ -3,44 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <title>SAHAYA - Login</title>
-<link rel="stylesheet" href="style.css">
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f9fbff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .container {
+    width: 360px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    text-align: center;
+  }
+
+  h1 {
+    margin-bottom: 25px;
+    letter-spacing: 3px;
+    color: #020f3b;
+  }
+
+  .role-btn {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 2px solid #020f3b;
+    background: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.2s;
+  }
+
+  .role-btn:hover,
+  .role-btn.active {
+    background: #020f3b;
+    color: #ffffff;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    border-radius: 6px;
+    border: 2px solid #020f3b;
+    outline: none;
+  }
+
+  button.login-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    background: #020f3b;
+    color: #ffffff;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  button.login-btn:hover {
+    background: #001a8f;
+  }
+
+  #msg {
+    margin-top: 12px;
+    color: red;
+    font-size: 14px;
+  }
+</style>
 </head>
+
 <body>
-<div class="header">SAHAYA</div>
+
 <div class="container">
-  <h2>Login</h2>
-  <select id="role">
-    <option value="user">User</option>
-    <option value="provider">Service Provider</option>
-    <option value="admin">Admin</option>
-  </select>
-  <input type="email" id="email" placeholder="Email"><br><br>
-  <input type="password" id="password" placeholder="Password"><br><br>
-  <button onclick="login()">Login</button>
+  <h1>SAHAYA</h1>
+
+  <button class="role-btn" onclick="setRole('user', this)">👤 USER</button>
+  <button class="role-btn" onclick="setRole('provider', this)">🧑‍🔧 SERVICE PROVIDER</button>
+  <button class="role-btn" onclick="setRole('admin', this)">🛡️ ADMIN</button>
+
+  <input type="email" id="email" placeholder="Email" required>
+  <input type="password" id="password" placeholder="Password" required>
+
+  <button class="login-btn" onclick="login()">LOGIN</button>
+
   <p id="msg"></p>
 </div>
 
 <script>
-async function login() {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const role = document.getElementById('role').value;
+let selectedRole = "";
 
-  const res = await fetch('http://localhost:3000/auth/login', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({email,password,role})
+function setRole(role, btn) {
+  selectedRole = role;
+  document.querySelectorAll(".role-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
+async function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  if (!selectedRole) {
+    document.getElementById("msg").innerText = "Please select a role";
+    return;
+  }
+
+  const res = await fetch("http://localhost:3000/auth/login", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ email, password, role: selectedRole })
   });
+
   const data = await res.json();
-  if(data.token){
-    localStorage.setItem('token', data.token);
-    if(role==='user') window.location='user.html';
-    else if(role==='provider') window.location='provider.html';
-    else window.location='admin.html';
+
+  if (data.token) {
+    localStorage.setItem("token", data.token);
+
+    if (selectedRole === "user") window.location = "user.html";
+    else if (selectedRole === "provider") window.location = "provider.html";
+    else window.location = "admin.html";
+
   } else {
-    document.getElementById('msg').innerText = data.error;
+    document.getElementById("msg").innerText = data.error || "Login failed";
   }
 }
 </script>
+
 </body>
 </html>
