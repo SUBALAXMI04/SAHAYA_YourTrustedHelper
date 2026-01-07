@@ -4,7 +4,7 @@ const path = require("path");
 
 // Import routes
 const authRoutes = require("./routes/auth");
-const bookingRoutes = require("./routes/bookings");
+const bookingRoutes = require("./routes/booking");
 const chatRoutes = require("./routes/chat");
 const trackingRoutes = require("./routes/tracking");
 const reviewRoutes = require("./routes/reviews");
