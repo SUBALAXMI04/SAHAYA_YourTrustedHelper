@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">User Dashboard</div>
+<div class="container">
+  <h3>Book a Service</h3>
+  <select id="service">
+    <option value="Plumber">Plumber</option>
+    <option value="Barber">Barber</option>
+  </select>
+  <input type="text" id="location" placeholder="Your location"><br><br>
+  <input type="number" id="price" placeholder="Proposed Price"><br><br>
+  <button onclick="bookService()">Book</button>
+
+  <h3>My Bookings</h3>
+  <table id="bookings">
+    <thead><tr><th>ID</th><th>Provider</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+const token = localStorage.getItem('token');
+
+async function bookService(){
+  const service = document.getElementById('service').value;
+  const location = document.getElementById('location').value;
+  const price = Number(document.getElementById('price').value);
+
+  await fetch('http://localhost:3000/bookings/create',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+    body: JSON.stringify({provider_id:1, service_type:service, user_location:location, proposed_price:price})
+  });
+  loadBookings();
+}
+
+async function loadBookings(){
+  const res = await fetch('http://localhost:3000/bookings/my',{
+    headers:{'Authorization':'Bearer '+token}
+  });
+  const data = await res.json();
+  const tbody = document.querySelector('#bookings tbody');
+  tbody.innerHTML='';
+  data.forEach(b=>{
+    tbody.innerHTML+=`<tr>
+      <td>${b.id}</td>
+      <td>${b.provider_id}</td>
+      <td>${b.status}</td>
+      <td>
+        <a href="chat.html?booking=${b.id}">Chat</a> |
+        <a href="tracking.html?booking=${b.id}">Track</a> |
+        <a href="reviews.html?booking=${b.id}">Review</a>
+      </td>
+    </tr>`;
+  });
+}
+
+loadBookings();
+</script>
+</body>
+</html>

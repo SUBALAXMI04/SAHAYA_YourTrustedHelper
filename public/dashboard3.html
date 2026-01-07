@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Provider Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">Provider Dashboard</div>
+<div class="container">
+  <h3>Service Requests</h3>
+  <table id="requests">
+    <thead><tr><th>ID</th><th>User</th><th>Service</th><th>Status</th><th>Action</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>Update Location</h3>
+  <input type="number" id="lat" placeholder="Latitude">
+  <input type="number" id="lng" placeholder="Longitude">
+  <button onclick="updateLocation()">Update</button>
+  <p id="locmsg"></p>
+</div>
+
+<script>
+const token = localStorage.getItem('token');
+
+async function loadRequests(){
+  const res = await fetch('http://localhost:3000/bookings/provider/requests',{
+    headers:{'Authorization':'Bearer '+token}
+  });
+  const data = await res.json();
+  const tbody = document.querySelector('#requests tbody');
+  tbody.innerHTML='';
+  data.forEach(r=>{
+    tbody.innerHTML+=`<tr>
+      <td>${r.id}</td>
+      <td>${r.user_id}</td>
+      <td>${r.service_type}</td>
+      <td>${r.status}</td>
+      <td>
+        <button onclick="respond(${r.id},'accept')">Accept</button>
+        <button onclick="respond(${r.id},'reject')">Reject</button>
+        <a href="chat.html?booking=${r.id}">Chat</a>
+      </td>
+    </tr>`;
+  });
+}
+
+async function respond(id,action){
+  await fetch('http://localhost:3000/bookings/provider/respond',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+    body: JSON.stringify({booking_id:id,action})
+  });
+  loadRequests();
+}
+
+async function updateLocation(){
+  const lat = parseFloat(document.getElementById('lat').value);
+  const lng = parseFloat(document.getElementById('lng').value);
+  await fetch('http://localhost:3000/tracking/update',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+    body: JSON.stringify({latitude:lat,longitude:lng})
+  });
+  document.getElementById('locmsg').innerText='Location Updated!';
+}
+
+loadRequests();
+</script>
+</body>
+</html>

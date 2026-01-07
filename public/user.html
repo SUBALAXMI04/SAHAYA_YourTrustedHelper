@@ -1,67 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>User Dashboard</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="header">User Dashboard</div>
-<div class="container">
-  <h3>Book a Service</h3>
-  <select id="service">
-    <option value="Plumber">Plumber</option>
-    <option value="Barber">Barber</option>
-  </select>
-  <input type="text" id="location" placeholder="Your location"><br><br>
-  <input type="number" id="price" placeholder="Proposed Price"><br><br>
-  <button onclick="bookService()">Book</button>
+  <meta charset="UTF-8">
+  <title>USER SIGN UP</title>
 
-  <h3>My Bookings</h3>
-  <table id="bookings">
-    <thead><tr><th>ID</th><th>Provider</th><th>Status</th><th>Action</th></tr></thead>
-    <tbody></tbody>
-  </table>
-</div>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f8f9fb; /* moon white */
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .container {
+      width: 480px;
+      padding: 30px 40px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      text-align: center;
+      letter-spacing: 2px;
+      margin-bottom: 25px;
+      color: #0a1f44;
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      width: 140px;
+      font-weight: bold;
+      color: #0a1f44;
+    }
+
+    .field input {
+      flex: 1;
+      padding: 8px 10px;
+      border: 2px solid #020c3a; /* extreme dark blue */
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .field input:focus {
+      border-color: #001a8f;
+    }
+
+    .password-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .password-wrapper span {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #map {
+      height: 280px;
+      width: 100%;
+      margin: 15px 0 20px 0;
+      border: 2px solid #020c3a;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #020c3a;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #001a8f;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>USER SIGN UP</h2>
+
+    <div class="field">
+      <label>Name</label>
+      <input id="uName" type="text" required>
+    </div>
+
+    <div class="field">
+      <label>Email ID</label>
+      <input id="uEmail" type="email" required>
+    </div>
+
+    <div class="field">
+      <label>Phone No</label>
+      <input id="uPhone" type="tel" required>
+    </div>
+
+    <div class="field">
+      <label>Aadhaar No</label>
+      <input id="uAadhaar" type="text" required>
+    </div>
+
+    <label style="font-weight:bold;color:#0a1f44;">
+      Select Location (Click on Map)
+    </label>
+    <div id="map"></div>
+
+    <div class="field">
+      <label>Password</label>
+      <div class="password-wrapper">
+        <input type="password" id="uPwd" required>
+        <span onclick="togglePwd('uPwd')">👁️</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Confirm Password</label>
+      <div class="password-wrapper">
+        <input type="password" id="uCpwd" required>
+        <span onclick="togglePwd('uCpwd')">👁️</span>
+      </div>
+    </div>
+
+    <button onclick="signup()">Sign Up</button>
+  </div>
 
 <script>
-const token = localStorage.getItem('token');
+let userLocation = null;
 
-async function bookService(){
-  const service = document.getElementById('service').value;
-  const location = document.getElementById('location').value;
-  const price = Number(document.getElementById('price').value);
-
-  await fetch('http://localhost:3000/bookings/create',{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
-    body: JSON.stringify({provider_id:1, service_type:service, user_location:location, proposed_price:price})
+function initMap() {
+  const map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 20.5937, lng: 78.9629 },
+    zoom: 5
   });
-  loadBookings();
-}
 
-async function loadBookings(){
-  const res = await fetch('http://localhost:3000/bookings/my',{
-    headers:{'Authorization':'Bearer '+token}
-  });
-  const data = await res.json();
-  const tbody = document.querySelector('#bookings tbody');
-  tbody.innerHTML='';
-  data.forEach(b=>{
-    tbody.innerHTML+=`<tr>
-      <td>${b.id}</td>
-      <td>${b.provider_id}</td>
-      <td>${b.status}</td>
-      <td>
-        <a href="chat.html?booking=${b.id}">Chat</a> |
-        <a href="tracking.html?booking=${b.id}">Track</a> |
-        <a href="reviews.html?booking=${b.id}">Review</a>
-      </td>
-    </tr>`;
+  map.addListener("click", (e) => {
+    userLocation = {
+      lat: e.latLng.lat(),
+      lng: e.latLng.lng()
+    };
+    alert("Location set successfully");
   });
 }
 
-loadBookings();
+function togglePwd(id) {
+  const p = document.getElementById(id);
+  p.type = p.type === "password" ? "text" : "password";
+}
+
+function signup() {
+  const name = uName.value;
+  const email = uEmail.value;
+  const phone = uPhone.value;
+  const aad = uAadhaar.value;
+  const pwd = uPwd.value;
+  const cpwd = uCpwd.value;
+
+  if (!name || !email || !phone || !aad || !pwd || !cpwd || !userLocation) {
+    return alert("All fields are mandatory including location");
+  }
+
+  if (pwd !== cpwd) {
+    return alert("Passwords must match");
+  }
+
+  fetch("/user-signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, phone, aad, userLocation, pwd })
+  })
+  .then(res => res.json())
+  .then(d => {
+    if (d.success) window.location = "/dashboard2.html";
+    else alert(d.error);
+  });
+}
 </script>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap"
+  async
+></script>
+
 </body>
 </html>
