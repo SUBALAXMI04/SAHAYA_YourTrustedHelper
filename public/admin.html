@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">Admin Dashboard</div>
+<div class="container">
+  <h3>All Users</h3>
+  <table id="users">
+    <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Action</th></tr></thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>All Providers</h3>
+  <table id="providers">
+    <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Rating</th><th>Action</th></tr></thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<script>
+const token = localStorage.getItem('token');
+
+async function loadUsers(){
+  const res = await fetch('http://localhost:3000/admin/users',{headers:{'Authorization':'Bearer '+token}});
+  const data = await res.json();
+  const tbody = document.querySelector('#users tbody');
+  tbody.innerHTML='';
+  data.forEach(u=>{
+    tbody.innerHTML+=`<tr>
+      <td>${u.id}</td>
+      <td>${u.name}</td>
+      <td>${u.email}</td>
+      <td>${u.phone}</td>
+      <td><a href="#" onclick="viewUser(${u.id})">More</a></td>
+    </tr>`;
+  });
+}
+
+async function loadProviders(){
+  const res = await fetch('http://localhost:3000/admin/providers',{headers:{'Authorization':'Bearer '+token}});
+  const data = await res.json();
+  const tbody = document.querySelector('#providers tbody');
+  tbody.innerHTML='';
+  data.forEach(p=>{
+    tbody.innerHTML+=`<tr>
+      <td>${p.id}</td>
+      <td>${p.name}</td>
+      <td>${p.email}</td>
+      <td>${p.phone}</td>
+      <td>${p.rating.toFixed(1)}</td>
+      <td><a href="#" onclick="viewProvider(${p.id})">More</a></td>
+    </tr>`;
+  });
+}
+
+function viewUser(id){alert('View user services via API /admin/users/'+id);}
+function viewProvider(id){alert('View provider services via API /admin/providers/'+id);}
+
+loadUsers();
+loadProviders();
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tracking</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="header">Provider Tracking</div>
+<div class="container">
+  <p>Provider Location:</p>
+  <p id="loc"></p>
+</div>
+
+<script>
+const token = localStorage.getItem('token');
+const urlParams = new URLSearchParams(window.location.search);
+const booking_id = urlParams.get('booking');
+
+async function loadLocation(){
+  const res = await fetch('http://localhost:3000/tracking/'+booking_id,{headers:{'Authorization':'Bearer '+token}});
+  const data = await res.json();
+  document.getElementById('loc').innerText=`Lat: ${data.latitude}, Lng: ${data.longitude}`;
+}
+
+setInterval(loadLocation,5000);
+loadLocation();
+</script>
+</body>
+</html>
