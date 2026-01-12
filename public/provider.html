@@ -1,242 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>SERVICE PROVIDER SIGN UP</title>
+<meta charset="UTF-8">
+<title>SERVICE PROVIDER SIGN UP</title>
 
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #f8f9fb;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#f8f9fb;
+  font-family:Arial,Helvetica,sans-serif;
+}
 
-    .container {
-      width: 580px;
-      padding: 30px 40px;
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.08);
-    }
+.container{
+  width:620px;
+  padding:30px 40px;
+  background:#fff;
+  border-radius:8px;
+  box-shadow:0 0 15px rgba(0,0,0,0.08);
+}
 
-    h2 {
-      text-align: center;
-      letter-spacing: 2px;
-      margin-bottom: 25px;
-      color: #0a1f44;
-    }
+h2{
+  text-align:center;
+  letter-spacing:2px;
+  margin-bottom:25px;
+  color:#0a1f44;
+}
 
-    .field {
-      display: flex;
-      align-items: center;
-      margin-bottom: 16px;
-    }
+h3{
+  color:#0a1f44;
+  margin-top:20px;
+}
 
-    .field label {
-      width: 180px;
-      font-weight: bold;
-      color: #0a1f44;
-    }
+.field{
+  display:flex;
+  align-items:center;
+  margin-bottom:16px;
+}
 
-    .field input {
-      flex: 1;
-      padding: 8px 10px;
-      border: 2px solid #020c3a;
-      border-radius: 4px;
-      outline: none;
-    }
+.field label{
+  width:190px;
+  font-weight:bold;
+  color:#0a1f44;
+}
 
-    #map2 {
-      height: 280px;
-      width: 100%;
-      margin: 15px 0 20px;
-      border: 2px solid #020c3a;
-      border-radius: 4px;
-    }
+.field input{
+  flex:1;
+  padding:8px 10px;
+  border:2px solid #020c3a;
+  border-radius:4px;
+  outline:none;
+}
 
-    /* -------- Service Dropdown -------- */
+.password-wrapper{
+  position:relative;
+  flex:1;
+}
 
-    .service-dropdown {
-      position: relative;
-      margin-bottom: 20px;
-    }
+.password-wrapper span{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  cursor:pointer;
+  font-weight:bold;
+  color:#020c3a;
+}
 
-    .service-selected {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      border: 2px solid #020c3a;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      color: #020c3a;
-    }
+/* SERVICE DROPDOWN */
 
-    .service-options {
-      display: none;
-      position: absolute;
-      width: 100%;
-      max-height: 360px;
-      overflow-y: auto;
-      background: #ffffff;
-      border: 2px solid #020c3a;
-      border-radius: 4px;
-      margin-top: 5px;
-      z-index: 20;
-    }
+.service-dropdown{
+  position:relative;
+  margin-bottom:20px;
+}
 
-    .service-card {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      cursor: pointer;
-      border-bottom: 1px solid #e0e0e0;
-    }
+.service-selected{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  border:2px solid #020c3a;
+  border-radius:4px;
+  cursor:pointer;
+  font-weight:bold;
+}
 
-    .service-card:last-child {
-      border-bottom: none;
-    }
+.service-options{
+  display:none;
+  position:absolute;
+  width:100%;
+  max-height:360px;
+  overflow-y:auto;
+  background:#fff;
+  border:2px solid #020c3a;
+  border-radius:4px;
+  margin-top:5px;
+  z-index:50;
+}
 
-    .service-card img {
-      width: 40px;
-      height: 40px;
-      margin-right: 12px;
-    }
+.service-card{
+  display:flex;
+  align-items:center;
+  padding:10px;
+  cursor:pointer;
+  border-bottom:1px solid #e0e0e0;
+}
 
-    .service-card:hover {
-      background-color: #f0f3ff;
-    }
+.service-card img{
+  width:40px;
+  height:40px;
+  margin-right:12px;
+}
 
-    .password-wrapper {
-      position: relative;
-      flex: 1;
-    }
+.service-card:hover{
+  background:#f0f3ff;
+}
 
-    .password-wrapper span {
-      position: absolute;
-      right: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-    }
+button.signup{
+  width:100%;
+  padding:10px;
+  background:#020c3a;
+  color:white;
+  border:none;
+  border-radius:4px;
+  font-size:15px;
+  cursor:pointer;
+}
 
-    button.signup {
-      width: 100%;
-      padding: 10px;
-      background-color: #020c3a;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 15px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-
-    button.signup:hover {
-      background-color: #001a8f;
-    }
-  </style>
+button.signup:hover{
+  background:#001a8f;
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
-  <h2>SERVICE PROVIDER SIGN UP</h2>
+<h2>SERVICE PROVIDER SIGN UP</h2>
 
-  <div class="field"><label>Name</label><input id="pName"></div>
-  <div class="field"><label>Email ID</label><input id="pEmail" type="email"></div>
-  <div class="field"><label>Phone No</label><input id="pPhone"></div>
-  <div class="field"><label>Aadhaar No</label><input id="pAadhaar"></div>
-  <div class="field"><label>Proof (PDF)</label><input type="file" id="proof" accept="application/pdf"></div>
+<div class="field"><label>NAME</label><input id="pName" oninput="toCaps(this)" required></div>
+<div class="field"><label>EMAIL ID</label><input id="pEmail" type="email" required></div>
+<div class="field"><label>PHONE NUMBER</label><input id="pPhone" oninput="allowNumbers(this)" required></div>
+<div class="field"><label>AADHAAR NUMBER</label><input id="pAadhaar" oninput="allowNumbers(this)" required></div>
+<p>Enter a proof for occupation like your ID, If you are self employed upload a surity letter from the locality's tehsildar</p>
+<div class="field"><label>OCCUPATION PROOF(PDF)</label><input type="file" id="proof" accept="application/pdf" required></div>
+<h3>ADDRESS DETAILS</h3>
 
-  <label style="font-weight:bold;color:#0a1f44;">Select Service Location (Click on Map)</label>
-  <div id="map2"></div>
+<div class="field"><label>HOUSE / BUILDING NUMBER</label><input id="houseNo" oninput="allowNumbers(this)" required></div>
+<div class="field"><label>STREET NAME</label><input id="street" oninput="toCaps(this)" required></div>
+<div class="field"><label>COLONY NAME</label><input id="colony" oninput="toCaps(this)" required></div>
+<div class="field"><label>AREA</label><input id="area" oninput="toCaps(this)" required></div>
+<div class="field"><label>CITY</label><input id="city" oninput="toCaps(this)" required></div>
+<div class="field"><label>DISTRICT</label><input id="district" oninput="toCaps(this)" required></div>
+<div class="field"><label>STATE</label><input id="state" oninput="toCaps(this)" required></div>
+<div class="field"><label>PINCODE</label><input id="pincode" maxlength="6" oninput="allowNumbers(this)" required></div>
 
-  <label style="font-weight:bold;color:#0a1f44;">Select Service Type</label>
+<label style="font-weight:bold;color:#0a1f44;">Select Service Type</label>
 
-  <div class="service-dropdown">
-    <div class="service-selected" onclick="toggleDropdown()">
-      <span id="selectedServiceText">Choose a service</span>
-      <span>▼</span>
-    </div>
+<div class="service-dropdown">
+<div class="service-selected" onclick="toggleDropdown()">
+<span id="selectedServiceText">Choose a service</span>
+<span>▼</span>
+</div>
 
-    <div class="service-options" id="serviceOptions">
-      <!-- SERVICES -->
-      <div class="service-card" onclick="selectService('Barber')"><img src="barber.png">Barber</div>
-      <div class="service-card" onclick="selectService('Beautician')"><img src="beautician.png">Beautician</div>
-      <div class="service-card" onclick="selectService('Hair Stylist')"><img src="hairstylist.png">Hair Stylist</div>
-      <div class="service-card" onclick="selectService('Carpenter')"><img src="carpenter.png">Carpenter</div>
-      <div class="service-card" onclick="selectService('Electrician')"><img src="electrician.png">Electrician</div>
-      <div class="service-card" onclick="selectService('Internet Technician')"><img src="internet.png">Internet Technician</div>
-      <div class="service-card" onclick="selectService('Computer Technician')"><img src="computer.png">Computer Technician</div>
-      <div class="service-card" onclick="selectService('Mobile Repair')"><img src="mobile.png">Mobile Repair</div>
-      <div class="service-card" onclick="selectService('TV Repair')"><img src="tv.png">TV Repair</div>
-      <div class="service-card" onclick="selectService('Washing Machine Repair')"><img src="washing.png">Washing Machine Repair</div>
-      <div class="service-card" onclick="selectService('Fridge Repair')"><img src="fridge.png">Fridge Repair</div>
-      <div class="service-card" onclick="selectService('RO Service')"><img src="ro.png">RO Service</div>
-      <div class="service-card" onclick="selectService('AC Technician')"><img src="ac.png">AC Technician</div>
-      <div class="service-card" onclick="selectService('Painter')"><img src="painter.png">Painter</div>
-      <div class="service-card" onclick="selectService('Plumber')"><img src="plumber.png">Plumber</div>
-      <div class="service-card" onclick="selectService('Mechanic')"><img src="mechanic.png">Mechanic</div>
-      <div class="service-card" onclick="selectService('Mason')"><img src="mason.png">Mason</div>
-      <div class="service-card" onclick="selectService('Gardener')"><img src="gardener.png">Gardener</div>
-      <div class="service-card" onclick="selectService('Laundry Service')"><img src="laundry.png">Laundry Service</div>
-      <div class="service-card" onclick="selectService('Tailor')"><img src="tailor.png">Tailor</div>
-      <div class="service-card" onclick="selectService('Security Guard')"><img src="security.png">Security Guard</div>
-      <div class="service-card" onclick="selectService('Delivery Helper')"><img src="delivery.png">Delivery Helper</div>
-      <div class="service-card" onclick="selectService('Driver')"><img src="driver.png">Driver</div>
-      <div class="service-card" onclick="selectService('Milkman')"><img src="milkman.png">Milkman</div>
-      <div class="service-card" onclick="selectService('Nurse')"><img src="nurse.png">Nurse</div>
-      <div class="service-card" onclick="selectService('Elder Care')"><img src="elder.png">Elder Care</div>
-      <div class="service-card" onclick="selectService('Baby Sitter')"><img src="baby.png">Baby Sitter</div>
-      <div class="service-card" onclick="selectService('Cook')"><img src="cook.png">Cook</div>
-      <div class="service-card" onclick="selectService('House Maid')"><img src="housemaid.png">House Maid</div>
-      <div class="service-card" onclick="selectService('Pest Control')"><img src="pest.png">Pest Control</div>
-      <div class="service-card" onclick="selectService('Cable Operator')"><img src="cable.png">Cable Operator</div>
-      <div class="service-card" onclick="selectService('Photographer')"><img src="photo.png">Photographer</div>
-    </div>
-  </div>
+<div class="service-options" id="serviceOptions">
 
-  <div class="field">
-    <label>Password</label>
-    <div class="password-wrapper">
-      <input type="password" id="pPwd">
-      <span onclick="togglePwd('pPwd')">👁️</span>
-    </div>
-  </div>
+<!-- FULL SERVICE LIST -->
+<div class="service-card" onclick="selectService('Barber')"><img src="barber.png">BARBER</div>
+<div class="service-card" onclick="selectService('Beautician')"><img src="beautician.png">BEAUTICIAN</div>
+<div class="service-card" onclick="selectService('Hair Stylist')"><img src="hairstylist.png">HAIR STYLIST</div>
+<div class="service-card" onclick="selectService('Carpenter')"><img src="carpenter.png">CARPENTER</div>
+<div class="service-card" onclick="selectService('Electrician')"><img src="electrician.png">ELECTRICIAN</div>
+<div class="service-card" onclick="selectService('Internet Technician')"><img src="internet.png">INTERNET TECHNICIAN</div>
+<div class="service-card" onclick="selectService('Computer Technician')"><img src="computer.png">COMPUTER TECHNICIAN</div>
+<div class="service-card" onclick="selectService('Mobile Repair')"><img src="mobile.png">MOBILE REPAIR</div>
+<div class="service-card" onclick="selectService('TV Repair')"><img src="tv.png">TV REPAIR</div>
+<div class="service-card" onclick="selectService('Washing Machine Repair')"><img src="washing.png">WASHING MACHINE REPAIR</div>
+<div class="service-card" onclick="selectService('Fridge Repair')"><img src="fridge.png">FRIDGE REPAIR</div>
+<div class="service-card" onclick="selectService('RO Service')"><img src="ro.png">RO SERVICE</div>
+<div class="service-card" onclick="selectService('AC Technician')"><img src="ac.png">AC TECHNICIAN</div>
+<div class="service-card" onclick="selectService('Painter')"><img src="painter.png">PAINTER</div>
+<div class="service-card" onclick="selectService('Plumber')"><img src="plumber.png">PLUMBER</div>
+<div class="service-card" onclick="selectService('Mechanic')"><img src="mechanic.png">MECHANIC</div>
+<div class="service-card" onclick="selectService('Mason')"><img src="mason.png">MASON</div>
+<div class="service-card" onclick="selectService('Gardener')"><img src="gardener.png">GARDENER</div>
+<div class="service-card" onclick="selectService('Laundry Service')"><img src="laundry.png">LAUNDRY SERVICE</div>
+<div class="service-card" onclick="selectService('Tailor')"><img src="tailor.png">TAILOR</div>
+<div class="service-card" onclick="selectService('Security Guard')"><img src="security.png">SECURITY GUARD</div>
+<div class="service-card" onclick="selectService('Delivery Helper')"><img src="delivery.png">DELIVERY HELPER</div>
+<div class="service-card" onclick="selectService('Driver')"><img src="driver.png">DRIVER</div>
+<div class="service-card" onclick="selectService('Milkman')"><img src="milkman.png">MILKMAN</div>
+<div class="service-card" onclick="selectService('Nurse')"><img src="nurse.png">NURSE</div>
+<div class="service-card" onclick="selectService('Elder Care')"><img src="elder.png">ELDER CARE</div>
+<div class="service-card" onclick="selectService('Baby Sitter')"><img src="baby.png">BABY SITTER</div>
+<div class="service-card" onclick="selectService('Cook')"><img src="cook.png">COOK</div>
+<div class="service-card" onclick="selectService('House Maid')"><img src="housemaid.png">HOUSE MAID</div>
+<div class="service-card" onclick="selectService('Pest Control')"><img src="pest.png">PEST CONTROL</div>
+<div class="service-card" onclick="selectService('Cable Operator')"><img src="cable.png">CABLE OPERATOR</div>
+<div class="service-card" onclick="selectService('Photographer')"><img src="photo.png">PHOTOGRAPHER</div>
+</div>
+</div>
 
-  <div class="field">
-    <label>Confirm Password</label>
-    <div class="password-wrapper">
-      <input type="password" id="pCpwd">
-      <span onclick="togglePwd('pCpwd')">👁️</span>
-    </div>
-  </div>
+<div class="field">
+<label>PASSWORD</label>
+<div class="password-wrapper">
+<input type="password" id="pPwd" required>
+<span onclick="togglePwd('pPwd', this)">SHOW</span>
+</div>
+</div>
 
-  <button class="signup" onclick="providerSignup()">Sign Up</button>
+<div class="field">
+<label>CONFIRM PASSWORD</label>
+<div class="password-wrapper">
+<input type="password" id="pCpwd" required>
+<span onclick="togglePwd('pCpwd', this)">SHOW</span>
+</div>
+</div>
+
+<button class="signup" onclick="providerSignup()">Sign Up</button>
 </div>
 
 <script>
-let providerLocation=null, serviceType="";
+let serviceType="";
 
-function initMap2(){
-  const map=new google.maps.Map(document.getElementById("map2"),{
-    center:{lat:20.5937,lng:78.9629},zoom:5
-  });
-  map.addListener("click",e=>{
-    providerLocation={lat:e.latLng.lat(),lng:e.latLng.lng()};
-    alert("Location set");
-  });
-}
+function toCaps(el){ el.value=el.value.toUpperCase(); }
+function allowNumbers(el){ el.value=el.value.replace(/[^0-9]/g,""); }
 
 function toggleDropdown(){
-  const o=document.getElementById("serviceOptions");
-  o.style.display=o.style.display==="block"?"none":"block";
+  serviceOptions.style.display =
+  serviceOptions.style.display==="block"?"none":"block";
 }
 
 function selectService(type){
@@ -245,21 +240,18 @@ function selectService(type){
   serviceOptions.style.display="none";
 }
 
-function togglePwd(id){
+function togglePwd(id,el){
   const p=document.getElementById(id);
-  p.type=p.type==="password"?"text":"password";
+  if(p.type==="password"){ p.type="text"; el.textContent="HIDE"; }
+  else{ p.type="password"; el.textContent="SHOW"; }
 }
 
 function providerSignup(){
-  if(!serviceType||!providerLocation){
-    alert("Select service type and location");
-    return;
-  }
-  alert("Signup submitted");
+  if(!serviceType){ alert("Select a service type"); return; }
+  if(pPwd.value!==pCpwd.value){ alert("Passwords do not match"); return; }
+  alert("Service Provider Signup Successful");
 }
 </script>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap2" async></script>
 
 </body>
 </html>

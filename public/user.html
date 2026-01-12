@@ -11,7 +11,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #f8f9fb; /* moon white */
+      background-color: #f8f9fb;
       font-family: Arial, Helvetica, sans-serif;
     }
 
@@ -30,14 +30,19 @@
       color: #0a1f44;
     }
 
+    h3 {
+      color: #0a1f44;
+      margin: 20px 0 10px;
+    }
+
     .field {
       display: flex;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .field label {
-      width: 140px;
+      width: 170px;
       font-weight: bold;
       color: #0a1f44;
     }
@@ -45,13 +50,14 @@
     .field input {
       flex: 1;
       padding: 8px 10px;
-      border: 2px solid #020c3a; /* extreme dark blue */
+      border: 2px solid #020c3a;
       border-radius: 4px;
       outline: none;
     }
 
-    .field input:focus {
-      border-color: #001a8f;
+    /* FORCE CAPS VISUALLY */
+    .uppercase {
+      text-transform: uppercase;
     }
 
     .password-wrapper {
@@ -65,15 +71,9 @@
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
+      font-size: 12px;
+      color: #020c3a;
       user-select: none;
-    }
-
-    #map {
-      height: 280px;
-      width: 100%;
-      margin: 15px 0 20px 0;
-      border: 2px solid #020c3a;
-      border-radius: 4px;
     }
 
     button {
@@ -96,96 +96,160 @@
 
 <body>
 
-  <div class="container">
-    <h2>USER SIGN UP</h2>
+<div class="container">
+  <h2>USER SIGN UP</h2>
 
-    <div class="field">
-      <label>Name</label>
-      <input id="uName" type="text" required>
-    </div>
-
-    <div class="field">
-      <label>Email ID</label>
-      <input id="uEmail" type="email" required>
-    </div>
-
-    <div class="field">
-      <label>Phone No</label>
-      <input id="uPhone" type="tel" required>
-    </div>
-
-    <div class="field">
-      <label>Aadhaar No</label>
-      <input id="uAadhaar" type="text" required>
-    </div>
-
-    <label style="font-weight:bold;color:#0a1f44;">
-      Select Location (Click on Map)
-    </label>
-    <div id="map"></div>
-
-    <div class="field">
-      <label>Password</label>
-      <div class="password-wrapper">
-        <input type="password" id="uPwd" required>
-        <span onclick="togglePwd('uPwd')">👁️</span>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Confirm Password</label>
-      <div class="password-wrapper">
-        <input type="password" id="uCpwd" required>
-        <span onclick="togglePwd('uCpwd')">👁️</span>
-      </div>
-    </div>
-
-    <button onclick="signup()">Sign Up</button>
+  <div class="field">
+    <label>NAME</label>
+    <input id="uName" class="uppercase" required>
   </div>
 
+  <div class="field">
+    <label>EMAIL ID</label>
+    <input id="uEmail" type="email" required>
+  </div>
+
+  <div class="field">
+    <label>PHONE NUMBER</label>
+    <input id="uPhone" inputmode="numeric" maxlength="10" required>
+  </div>
+
+  <div class="field">
+    <label>AADHAAR NUMBER</label>
+    <input id="uAadhaar" inputmode="numeric" maxlength="12" required>
+  </div>
+
+  <h3>ADDRESS DETAILS</h3>
+
+  <div class="field">
+    <label>HOUSE / BLDG NO</label>
+    <input id="houseNo" inputmode="numeric" required>
+  </div>
+
+  <div class="field">
+    <label>STREET NAME</label>
+    <input id="street" class="uppercase" required>
+  </div>
+
+  <div class="field">
+    <label>COLONY NAME</label>
+    <input id="colony" class="uppercase" required>
+  </div>
+
+  <div class="field">
+    <label>AREA</label>
+    <input id="area" class="uppercase" required>
+  </div>
+
+  <div class="field">
+    <label>CITY</label>
+    <input id="city" class="uppercase" required>
+  </div>
+
+  <div class="field">
+    <label>DISTRICT</label>
+    <input id="district" class="uppercase" required>
+  </div>
+
+  <div class="field">
+    <label>STATE</label>
+    <input id="state" class="uppercase" required>
+  </div>
+
+  <div class="field">
+    <label>PINCODE</label>
+    <input id="pincode" inputmode="numeric" maxlength="6" required>
+  </div>
+
+  <div class="field">
+    <label>PASSWORD</label>
+    <div class="password-wrapper">
+      <input type="password" id="uPwd" required>
+      <span onclick="togglePwd('uPwd', this)">SHOW</span>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>CONFIRM PASSWORD</label>
+    <div class="password-wrapper">
+      <input type="password" id="uCpwd" required>
+      <span onclick="togglePwd('uCpwd', this)">SHOW</span>
+    </div>
+  </div>
+
+  <button onclick="signup()">Sign Up</button>
+</div>
+
 <script>
-let userLocation = null;
-
-function initMap() {
-  const map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 20.5937, lng: 78.9629 },
-    zoom: 5
+/* FORCE CAPS IN DATA */
+document.querySelectorAll(".uppercase").forEach(el => {
+  el.addEventListener("input", () => {
+    el.value = el.value.toUpperCase();
   });
+});
 
-  map.addListener("click", (e) => {
-    userLocation = {
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng()
-    };
-    alert("Location set successfully");
+/* ONLY NUMBERS */
+function onlyNumbers(id) {
+  const el = document.getElementById(id);
+  el.addEventListener("input", () => {
+    el.value = el.value.replace(/[^0-9]/g, "");
   });
 }
+["uPhone","uAadhaar","houseNo","pincode"].forEach(onlyNumbers);
 
-function togglePwd(id) {
-  const p = document.getElementById(id);
-  p.type = p.type === "password" ? "text" : "password";
+/* SHOW / HIDE PASSWORD */
+function togglePwd(id, el) {
+  const input = document.getElementById(id);
+  if (input.type === "password") {
+    input.type = "text";
+    el.textContent = "HIDE";
+  } else {
+    input.type = "password";
+    el.textContent = "SHOW";
+  }
 }
 
+/* SIGNUP */
 function signup() {
-  const name = uName.value;
-  const email = uEmail.value;
-  const phone = uPhone.value;
-  const aad = uAadhaar.value;
-  const pwd = uPwd.value;
-  const cpwd = uCpwd.value;
+  const data = {
+    name: uName.value,
+    email: uEmail.value,
+    phone: uPhone.value,
+    aadhaar: uAadhaar.value,
+    houseNo: houseNo.value,
+    street: street.value,
+    colony: colony.value,
+    area: area.value,
+    city: city.value,
+    district: district.value,
+    state: state.value,
+    pincode: pincode.value,
+    pwd: uPwd.value
+  };
 
-  if (!name || !email || !phone || !aad || !pwd || !cpwd || !userLocation) {
-    return alert("All fields are mandatory including location");
+  for (let key in data) {
+    if (!data[key]) return alert("All fields are mandatory");
   }
 
-  if (pwd !== cpwd) {
+  if (uPwd.value !== uCpwd.value) {
     return alert("Passwords must match");
+  }
+
+  const strongPwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+  if (!strongPwd.test(uPwd.value)) {
+    return alert(
+      "Password must contain:\n" +
+      "- 1 uppercase letter\n" +
+      "- 1 lowercase letter\n" +
+      "- 1 special character\n" +
+      "- Minimum 8 characters"
+    );
   }
 
   fetch("/user-signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name, email, phone, aad, userLocation, pwd })
+    body: JSON.stringify(data)
   })
   .then(res => res.json())
   .then(d => {
@@ -194,11 +258,6 @@ function signup() {
   });
 }
 </script>
-
-<script
-  src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap"
-  async
-></script>
 
 </body>
 </html>
