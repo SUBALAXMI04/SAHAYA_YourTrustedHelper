@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Give Review - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4169E1 0%, #E0E6FF 50%, #D0D8F4 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 20px rgba(65, 105, 225, 0.1);
+    }
+
+    .back-btn {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .review-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(65, 105, 225, 0.15);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .card-subtitle {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .card-body {
+      padding: 30px;
+    }
+
+    .service-summary {
+      background: linear-gradient(135deg, #E0E6FF 0%, #D0D8F4 100%);
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 25px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .summary-label {
+      color: #666;
+    }
+
+    .summary-value {
+      font-weight: 700;
+      color: #4169E1;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #4169E1;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    .star-rating {
+      display: flex;
+      gap: 10px;
+      font-size: 40px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    .star {
+      cursor: pointer;
+      transition: transform 0.2s;
+      opacity: 0.3;
+    }
+
+    .star:hover,
+    .star.active {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    textarea {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #E0E6FF;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      resize: vertical;
+      min-height: 120px;
+      focus: none;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #4169E1;
+      box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
+    }
+
+    .char-count {
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+      text-align: right;
+    }
+
+    .rating-display {
+      font-size: 30px;
+      margin-top: 10px;
+    }
+
+    .tip-section {
+      background: #FFF8DC;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      border-left: 4px solid #FFD700;
+    }
+
+    .tip-label {
+      font-weight: 700;
+      color: #FF8C00;
+      margin-bottom: 10px;
+    }
+
+    .tip-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .tip-btn {
+      padding: 10px;
+      border: 2px solid #FFD700;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #FF8C00;
+      transition: all 0.3s;
+    }
+
+    .tip-btn.active {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: white;
+    }
+
+    .tip-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .custom-tip {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .custom-tip input {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #FFD700;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .custom-tip button {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(65, 105, 225, 0.3);
+    }
+
+    .btn-cancel {
+      background: #E0E6FF;
+      color: #4169E1;
+    }
+
+    .btn-cancel:hover {
+      background: #D0D8F4;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      border: 4px solid #E0E6FF;
+      border-top: 4px solid #4169E1;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .success-message {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .success-icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .card-header {
+        padding: 20px;
+      }
+
+      .card-body {
+        padding: 20px;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <div style="font-size: 20px; font-weight: 700; color: #4169E1;">Rate Your Experience</div>
+    <div style="width: 80px;"></div>
+  </header>
+
+  <div class="container">
+    <div class="review-card">
+      <div id="loadingState" class="loading">
+        <div class="spinner"></div>
+        <p>Loading booking details...</p>
+      </div>
+
+      <div id="reviewForm" style="display: none;">
+        <div class="card-header">
+          <div class="card-title">Share Your Feedback</div>
+          <div class="card-subtitle">Help other users make informed decisions</div>
+        </div>
+
+        <div class="card-body">
+          <!-- Service Summary -->
+          <div class="service-summary">
+            <div class="summary-item">
+              <span class="summary-label">Booking ID:</span>
+              <span class="summary-value" id="bookingId">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Provider:</span>
+              <span class="summary-value" id="providerName">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Service:</span>
+              <span class="summary-value" id="serviceType">-</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-label">Amount Paid:</span>
+              <span class="summary-value" id="amount">₹0</span>
+            </div>
+          </div>
+
+          <!-- Rating Form -->
+          <form id="reviewFormElement" onsubmit="submitReview(event)">
+            <!-- Star Rating -->
+            <div class="form-group">
+              <label>⭐ How would you rate this service?</label>
+              <div class="star-rating" id="starRating">
+                <span class="star" data-rating="1">★</span>
+                <span class="star" data-rating="2">★</span>
+                <span class="star" data-rating="3">★</span>
+                <span class="star" data-rating="4">★</span>
+                <span class="star" data-rating="5">★</span>
+              </div>
+              <div class="rating-display" id="ratingDisplay">Click to rate</div>
+              <input type="hidden" id="rating" name="rating" value="0">
+            </div>
+
+            <!-- Comment -->
+            <div class="form-group">
+              <label>📝 Your feedback (optional)</label>
+              <textarea id="comment" name="comment" placeholder="Share your experience..."></textarea>
+              <div class="char-count"><span id="charCount">0</span>/500</div>
+            </div>
+
+            <!-- Tip Section -->
+            <div class="tip-section">
+              <div class="tip-label">💵 Want to add a tip?</div>
+              <div class="tip-options">
+                <button type="button" class="tip-btn" data-tip="0" onclick="setTip(0)">No Tip</button>
+                <button type="button" class="tip-btn" data-tip="20" onclick="setTip(20)">₹20</button>
+                <button type="button" class="tip-btn" data-tip="50" onclick="setTip(50)">₹50</button>
+                <button type="button" class="tip-btn" data-tip="100" onclick="setTip(100)">₹100</button>
+              </div>
+              <div class="custom-tip">
+                <input type="number" id="customTip" placeholder="Custom amount (₹)" min="0" step="10">
+                <button type="button" onclick="setCustomTip()">Add</button>
+              </div>
+              <div style="margin-top: 10px; color: #666; font-size: 12px;">
+                Selected Tip: <strong id="selectedTipDisplay">₹0</strong>
+              </div>
+              <input type="hidden" id="tip" name="tip" value="0">
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+              <button type="button" class="btn btn-cancel" onclick="goBack()">Cancel</button>
+              <button type="submit" class="btn btn-submit">Submit Review</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div id="successState" style="display: none;">
+        <div class="card-header">
+          <div class="card-title">Thank You!</div>
+        </div>
+        <div class="success-message">
+          <div class="success-icon">✅</div>
+          <p style="font-size: 16px; margin-bottom: 20px;">Your review has been submitted successfully!</p>
+          <button class="btn btn-submit" onclick="goToBookings()" style="width: auto; padding: 12px 30px;">Back to My Bookings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookingId = urlParams.get('booking_id');
+    const token = localStorage.getItem('token');
+    let selectedRating = 0;
+    let selectedTip = 0;
+
+    // Star rating interaction
+    document.querySelectorAll('.star').forEach(star => {
+      star.addEventListener('click', function() {
+        selectedRating = parseInt(this.dataset.rating);
+        document.getElementById('rating').value = selectedRating;
+        updateStarDisplay();
+        updateRatingDisplay();
+      });
+    });
+
+    function updateStarDisplay() {
+      document.querySelectorAll('.star').forEach(star => {
+        if (parseInt(star.dataset.rating) <= selectedRating) {
+          star.classList.add('active');
+        } else {
+          star.classList.remove('active');
+        }
+      });
+    }
+
+    function updateRatingDisplay() {
+      const ratings = ['', '😞 Poor', '😐 Average', '🙂 Good', '😊 Very Good', '😍 Excellent'];
+      document.getElementById('ratingDisplay').textContent = ratings[selectedRating] || 'Click to rate';
+    }
+
+    // Character count
+    document.getElementById('comment').addEventListener('input', function() {
+      const count = this.value.length;
+      document.getElementById('charCount').textContent = Math.min(count, 500);
+      if (count > 500) {
+        this.value = this.value.substring(0, 500);
+      }
+    });
+
+    function setTip(amount) {
+      selectedTip = amount;
+      document.getElementById('tip').value = amount;
+      document.getElementById('selectedTipDisplay').textContent = `₹${amount}`;
+      document.querySelectorAll('.tip-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (parseInt(btn.dataset.tip) === amount) {
+          btn.classList.add('active');
+        }
+      });
+      document.getElementById('customTip').value = '';
+    }
+
+    function setCustomTip() {
+      const customAmount = parseInt(document.getElementById('customTip').value) || 0;
+      if (customAmount > 0) {
+        setTip(customAmount);
+      } else {
+        alert('Please enter a valid amount');
+      }
+    }
+
+    async function loadBookingDetails() {
+      if (!token || !bookingId) {
+        alert('Invalid booking ID');
+        goBack();
+        return;
+      }
+
+      try {
+        const response = await fetch(`/bookings/${bookingId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          displayBookingDetails(data.booking);
+        } else {
+          alert('Booking not found');
+          goBack();
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to load booking');
+        goBack();
+      }
+    }
+
+    function displayBookingDetails(booking) {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('reviewForm').style.display = 'block';
+
+      document.getElementById('bookingId').textContent = booking.id;
+      document.getElementById('providerName').textContent = booking.provider_name;
+      document.getElementById('serviceType').textContent = booking.service_type;
+      document.getElementById('amount').textContent = `₹${booking.price}`;
+
+      window.currentBookingId = bookingId;
+    }
+
+    async function submitReview(event) {
+      event.preventDefault();
+
+      if (selectedRating === 0) {
+        alert('Please select a rating');
+        return;
+      }
+
+      try {
+        const reviewData = {
+          booking_id: window.currentBookingId,
+          rating: selectedRating,
+          comment: document.getElementById('comment').value,
+          tip_amount: selectedTip
+        };
+
+        const response = await fetch('/reviews/submit', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(reviewData)
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          // Process tip if provided
+          if (selectedTip > 0) {
+            await fetch(`/payments/${window.currentBookingId}/pay`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                amount: selectedTip,
+                tip_amount: selectedTip,
+                payment_method: 'online'
+              })
+            });
+          }
+
+          document.getElementById('reviewForm').style.display = 'none';
+          document.getElementById('successState').style.display = 'block';
+        } else {
+          alert(data.error || 'Failed to submit review');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to submit review');
+      }
+    }
+
+    function goBack() {
+      history.back();
+    }
+
+    function goToBookings() {
+      window.location.href = '/my-bookings.html';
+    }
+
+    // Initialize
+    if (!token) {
+      window.location.href = '/user-login.html';
+    } else {
+      loadBookingDetails();
+    }
+  </script>
+</body>
+</html>

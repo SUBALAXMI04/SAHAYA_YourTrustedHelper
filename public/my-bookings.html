@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Bookings - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+    }
+
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      margin-right: 20px;
+    }
+
+    nav a:hover {
+      color: #667eea;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .user-info {
+      text-align: right;
+      font-size: 14px;
+    }
+
+    .user-name {
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .logout-btn {
+      padding: 8px 20px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
+    .bookings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .booking-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .booking-card:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .booking-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .booking-id {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    .booking-body {
+      padding: 20px;
+    }
+
+    .booking-service {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #667eea;
+    }
+
+    .booking-details {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.8;
+      margin-bottom: 15px;
+    }
+
+    .booking-details div {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .label {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .value {
+      color: #667eea;
+      font-weight: 700;
+    }
+
+    .booking-footer {
+      padding: 15px 20px;
+      background: #f9f9f9;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+
+    .btn-danger {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #c0392b;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    @media (max-width: 768px) {
+      .bookings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <div class="logo">SAHAYA</div>
+      <nav>
+        <a href="/dashboard1.html">Dashboard</a>
+        <a href="/my-bookings.html" style="color: #667eea;">My Bookings</a>
+        <a href="/reviews.html">Reviews</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <div class="user-name" id="userName">User</div>
+        <div id="userEmail">user@email.com</div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1>📅 My Bookings</h1>
+    
+    <div id="loadingState" class="loading">
+      <p>Loading bookings...</p>
+    </div>
+
+    <div id="emptyState" class="empty-state" style="display: none;">
+      <div class="empty-icon">📭</div>
+      <div class="empty-title">No Bookings Yet</div>
+      <p>You haven't made any bookings. <a href="/dashboard1.html">Browse services and book one now!</a></p>
+    </div>
+
+    <div id="bookingsGrid" class="bookings-grid" style="display: none;"></div>
+  </div>
+
+  <script>
+    async function loadBookings() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/user-login.html';
+        return;
+      }
+
+      try {
+        const response = await fetch('/bookings/user', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        if (data.success && data.bookings) {
+          if (data.bookings.length === 0) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'block';
+          } else {
+            displayBookings(data.bookings);
+          }
+        } else {
+          document.getElementById('loadingState').style.display = 'none';
+          document.getElementById('emptyState').style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error loading bookings:', error);
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('emptyState').style.display = 'block';
+      }
+    }
+
+    function displayBookings(bookings) {
+      const grid = document.getElementById('bookingsGrid');
+      document.getElementById('loadingState').style.display = 'none';
+      
+      grid.innerHTML = bookings.map(booking => `
+        <div class="booking-card">
+          <div class="booking-header">
+            <div class="booking-id">Booking #${booking.id}</div>
+            <div class="status-badge">${getStatusBadge(booking.status)}</div>
+          </div>
+          <div class="booking-body">
+            <div class="booking-service">${booking.service_type}</div>
+            <div class="booking-details">
+              <div>
+                <span class="label">Provider:</span>
+                <span class="value">${booking.provider_name}</span>
+              </div>
+              <div>
+                <span class="label">Date:</span>
+                <span>${booking.booking_date}</span>
+              </div>
+              <div>
+                <span class="label">Time:</span>
+                <span>${booking.booking_time || 'N/A'}</span>
+              </div>
+              <div>
+                <span class="label">Amount:</span>
+                <span class="value">₹${booking.amount || 'N/A'}</span>
+              </div>
+              <div>
+                <span class="label">Rating:</span>
+                <span>⭐ ${booking.rating || 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+          <div class="booking-footer">
+            ${getActionButtons(booking)}
+          </div>
+        </div>
+      `).join('');
+      
+      grid.style.display = 'grid';
+    }
+
+    function getStatusBadge(status) {
+      const statusMap = {
+        'pending': '⏳ Pending',
+        'accepted': '✅ Accepted',
+        'price_set': '💰 Awaiting Payment',
+        'awaiting_delivery': '🚚 In Progress',
+        'completed': '✔️ Completed',
+        'cancelled': '❌ Cancelled',
+        'paid': '✓ Paid'
+      };
+      return statusMap[status] || status;
+    }
+
+    function getActionButtons(booking) {
+      const token = localStorage.getItem('token');
+      let buttons = '';
+
+      if (['pending', 'accepted'].includes(booking.status)) {
+        buttons += `<button class="btn btn-danger" onclick="cancelBooking(${booking.id})">Cancel</button>`;
+      }
+
+      if (booking.status === 'price_set') {
+        buttons += `<button class="btn btn-primary" onclick="proceedToPayment(${booking.id})">Pay Now</button>`;
+      }
+
+      if (booking.status === 'completed') {
+        buttons += `<button class="btn btn-primary" onclick="giveReview(${booking.id})">Give Review</button>`;
+      }
+
+      buttons += `<button class="btn btn-secondary" onclick="viewDetails(${booking.id})">Details</button>`;
+      
+      return buttons;
+    }
+
+    async function cancelBooking(bookingId) {
+      if (!confirm('Are you sure you want to cancel this booking?')) return;
+
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch(`/bookings/${bookingId}/cancel`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ cancellation_reason: 'User cancelled' })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          alert('Booking cancelled successfully');
+          location.reload();
+        } else {
+          alert(data.error);
+        }
+      } catch (error) {
+        console.error('Error cancelling booking:', error);
+        alert('Failed to cancel booking');
+      }
+    }
+
+    function proceedToPayment(bookingId) {
+      window.location.href = `/payment.html?booking_id=${bookingId}`;
+    }
+
+    function giveReview(bookingId) {
+      window.location.href = `/give-review.html?booking_id=${bookingId}`;
+    }
+
+    function viewDetails(bookingId) {
+      alert(`Booking details for #${bookingId} - Coming soon!`);
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      window.location.href = '/index.html';
+    }
+
+    // Initialize
+    document.getElementById('userName').textContent = localStorage.getItem('userName') || 'User';
+    document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || 'user@email.com';
+    loadBookings();
+  </script>
+</body>
+</html>

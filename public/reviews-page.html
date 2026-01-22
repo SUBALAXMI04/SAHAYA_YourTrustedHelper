@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Reviews - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+    }
+
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      margin-right: 20px;
+    }
+
+    nav a:hover {
+      color: #667eea;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .user-info {
+      text-align: right;
+      font-size: 14px;
+    }
+
+    .user-name {
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .logout-btn {
+      padding: 8px 20px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 20px;
+      border-bottom: 2px solid #e0e0e0;
+      margin-bottom: 30px;
+    }
+
+    .tab {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      color: #999;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .review-card {
+      background: white;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 15px;
+    }
+
+    .reviewer-info {
+      font-weight: 700;
+      color: #667eea;
+      font-size: 16px;
+    }
+
+    .review-rating {
+      display: flex;
+      gap: 5px;
+      font-size: 18px;
+    }
+
+    .review-date {
+      color: #999;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .review-text {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+    }
+
+    @media (max-width: 768px) {
+      .review-header {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <div class="logo">SAHAYA</div>
+      <nav>
+        <a href="/dashboard1.html">Dashboard</a>
+        <a href="/my-bookings.html">My Bookings</a>
+        <a href="/reviews-page.html" style="color: #667eea;">Reviews</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <div class="user-name" id="userName">User</div>
+        <div id="userEmail">user@email.com</div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <h1>⭐ My Reviews</h1>
+    
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('given')">Reviews I Gave</button>
+      <button class="tab" onclick="switchTab('received')">Reviews About Me</button>
+    </div>
+
+    <!-- Reviews Given Tab -->
+    <div id="given" class="tab-content active">
+      <div id="givenLoading" class="loading">Loading reviews...</div>
+      <div id="givenEmpty" class="empty-state" style="display: none;">
+        <div class="empty-icon">📝</div>
+        <p>You haven't given any reviews yet.</p>
+      </div>
+      <div id="givenReviews"></div>
+    </div>
+
+    <!-- Reviews Received Tab -->
+    <div id="received" class="tab-content">
+      <div id="receivedLoading" class="loading">Loading reviews...</div>
+      <div id="receivedEmpty" class="empty-state" style="display: none;">
+        <div class="empty-icon">💭</div>
+        <p>No one has reviewed you yet.</p>
+      </div>
+      <div id="receivedReviews"></div>
+    </div>
+  </div>
+
+  <script>
+    async function loadGivenReviews() {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch('/reviews/my-reviews', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        const container = document.getElementById('givenReviews');
+        const loading = document.getElementById('givenLoading');
+        const empty = document.getElementById('givenEmpty');
+
+        loading.style.display = 'none';
+
+        if (data.success && data.reviews.length > 0) {
+          container.innerHTML = data.reviews.map(review => `
+            <div class="review-card">
+              <div class="review-header">
+                <div>
+                  <div class="reviewer-info">To: ${review.recipient_name}</div>
+                  <div class="review-date">${new Date(review.created_at).toLocaleDateString()}</div>
+                </div>
+                <div class="review-rating">
+                  ${Array(review.rating).fill('⭐').join('') + Array(5 - review.rating).fill('☆').join('')}
+                  <span style="margin-left: 10px; color: #667eea; font-weight: 700;">${review.rating}/5</span>
+                </div>
+              </div>
+              <div class="review-text">${review.comment || 'No comment provided'}</div>
+            </div>
+          `).join('');
+        } else {
+          empty.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error loading reviews:', error);
+        document.getElementById('givenLoading').style.display = 'none';
+        document.getElementById('givenEmpty').style.display = 'block';
+      }
+    }
+
+    async function loadReceivedReviews() {
+      const token = localStorage.getItem('token');
+      try {
+        const response = await fetch('/reviews/about-me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await response.json();
+
+        const container = document.getElementById('receivedReviews');
+        const loading = document.getElementById('receivedLoading');
+        const empty = document.getElementById('receivedEmpty');
+
+        loading.style.display = 'none';
+
+        if (data.success && data.reviews.length > 0) {
+          container.innerHTML = data.reviews.map(review => `
+            <div class="review-card">
+              <div class="review-header">
+                <div>
+                  <div class="reviewer-info">From: ${review.reviewer_name}</div>
+                  <div class="review-date">${new Date(review.created_at).toLocaleDateString()}</div>
+                </div>
+                <div class="review-rating">
+                  ${Array(review.rating).fill('⭐').join('') + Array(5 - review.rating).fill('☆').join('')}
+                  <span style="margin-left: 10px; color: #667eea; font-weight: 700;">${review.rating}/5</span>
+                </div>
+              </div>
+              <div class="review-text">${review.comment || 'No comment provided'}</div>
+            </div>
+          `).join('');
+        } else {
+          empty.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error loading reviews:', error);
+        document.getElementById('receivedLoading').style.display = 'none';
+        document.getElementById('receivedEmpty').style.display = 'block';
+      }
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+
+      if (tabName === 'received') {
+        loadReceivedReviews();
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      window.location.href = '/index.html';
+    }
+
+    // Initialize
+    document.getElementById('userName').textContent = localStorage.getItem('userName') || 'User';
+    document.getElementById('userEmail').textContent = localStorage.getItem('userEmail') || 'user@email.com';
+    loadGivenReviews();
+  </script>
+</body>
+</html>

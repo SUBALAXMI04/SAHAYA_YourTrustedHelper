@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Settings - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4169E1 0%, #E0E6FF 50%, #D0D8F4 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 20px rgba(65, 105, 225, 0.1);
+    }
+
+    .nav-btn {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .profile-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(65, 105, 225, 0.15);
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+
+    .profile-avatar-section {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .avatar {
+      width: 100px;
+      height: 100px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 3px solid white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+
+    .avatar-upload {
+      position: absolute;
+      bottom: 0;
+      right: 50%;
+      transform: translateX(50px);
+      background: #FFA500;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .profile-name {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .profile-email {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .profile-body {
+      padding: 30px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #E0E6FF;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      border: none;
+      background: transparent;
+      color: #999;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+    }
+
+    .tab-btn.active {
+      color: #4169E1;
+      border-bottom-color: #4169E1;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #4169E1;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #E0E6FF;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      color: #333;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #4169E1;
+      box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #4169E1;
+      margin: 20px 0 15px;
+      padding-top: 20px;
+      border-top: 2px solid #E0E6FF;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-save {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+    }
+
+    .btn-save:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(65, 105, 225, 0.3);
+    }
+
+    .btn-cancel {
+      background: #E0E6FF;
+      color: #4169E1;
+    }
+
+    .btn-cancel:hover {
+      background: #D0D8F4;
+    }
+
+    .btn-danger {
+      background: #FFE0E0;
+      color: #E74C3C;
+    }
+
+    .btn-danger:hover {
+      background: #FF4444;
+      color: white;
+    }
+
+    .info-box {
+      background: #E0E6FF;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      color: #4169E1;
+      border-left: 4px solid #4169E1;
+    }
+
+    .success-message {
+      background: #D4EDDA;
+      color: #155724;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .error-message {
+      background: #FFE0E0;
+      color: #E74C3C;
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      border: 4px solid #E0E6FF;
+      border-top: 4px solid #4169E1;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .profile-header {
+        padding: 30px 20px;
+      }
+
+      .profile-body {
+        padding: 20px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="nav-btn" onclick="goBack()">← Back</button>
+    <div style="font-size: 20px; font-weight: 700; color: #4169E1;">Profile Settings</div>
+    <button class="nav-btn" onclick="logout()">Logout</button>
+  </header>
+
+  <div class="container">
+    <div class="profile-card">
+      <div id="loadingState" class="loading">
+        <div class="spinner"></div>
+        <p>Loading profile...</p>
+      </div>
+
+      <div id="profileContent" style="display: none;">
+        <div class="profile-header">
+          <div class="profile-avatar-section">
+            <div class="avatar">👤</div>
+            <div class="avatar-upload" onclick="uploadAvatar()" title="Change photo">📷</div>
+          </div>
+          <div class="profile-name" id="profileName">User Name</div>
+          <div class="profile-email" id="profileEmail">user@email.com</div>
+        </div>
+
+        <div class="profile-body">
+          <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('personal')">Personal Info</button>
+            <button class="tab-btn" onclick="switchTab('security')">Security</button>
+            <button class="tab-btn" onclick="switchTab('preferences')">Preferences</button>
+          </div>
+
+          <!-- Personal Info Tab -->
+          <div id="personal" class="tab-content active">
+            <div class="success-message" id="successMsg"></div>
+            <div class="error-message" id="errorMsg"></div>
+
+            <form onsubmit="updateProfile(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>First Name</label>
+                  <input type="text" id="firstName" required>
+                </div>
+                <div class="form-group">
+                  <label>Last Name</label>
+                  <input type="text" id="lastName" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="email" readonly>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Phone Number</label>
+                  <input type="tel" id="phone" placeholder="+91 98765 43210">
+                </div>
+                <div class="form-group">
+                  <label>Date of Birth</label>
+                  <input type="text" id="dob" placeholder="DD/MM/YYYY">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Address</label>
+                <textarea id="address" placeholder="Your full address"></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>City</label>
+                  <input type="text" id="city" placeholder="City">
+                </div>
+                <div class="form-group">
+                  <label>State</label>
+                  <input type="text" id="state" placeholder="State">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Bio</label>
+                <textarea id="bio" placeholder="Tell us about yourself..."></textarea>
+              </div>
+
+              <div class="button-group">
+                <button type="button" class="btn btn-cancel" onclick="resetForm()">Cancel</button>
+                <button type="submit" class="btn btn-save">Save Changes</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Security Tab -->
+          <div id="security" class="tab-content">
+            <div class="info-box">
+              💡 Keep your account secure by using a strong, unique password
+            </div>
+
+            <form onsubmit="changePassword(event)">
+              <div class="form-group">
+                <label>Current Password</label>
+                <input type="password" id="currentPassword" required>
+              </div>
+
+              <div class="form-group">
+                <label>New Password</label>
+                <input type="password" id="newPassword" required placeholder="At least 8 characters">
+              </div>
+
+              <div class="form-group">
+                <label>Confirm New Password</label>
+                <input type="password" id="confirmPassword" required>
+              </div>
+
+              <div class="button-group">
+                <button type="button" class="btn btn-cancel" onclick="resetSecurityForm()">Cancel</button>
+                <button type="submit" class="btn btn-save">Update Password</button>
+              </div>
+            </form>
+
+            <div class="section-title">Danger Zone</div>
+            <div class="info-box">
+              ⚠️ Deleting your account is permanent and cannot be undone
+            </div>
+            <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+          </div>
+
+          <!-- Preferences Tab -->
+          <div id="preferences" class="tab-content">
+            <div class="info-box">
+              ⚙️ Customize your SAHAYA experience
+            </div>
+
+            <form onsubmit="updatePreferences(event)">
+              <div class="form-group">
+                <label>Language</label>
+                <select id="language">
+                  <option value="en">English</option>
+                  <option value="hi">Hindi</option>
+                  <option value="ta">Tamil</option>
+                  <option value="te">Telugu</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Notification Preferences</label>
+                <div style="display: flex; gap: 15px; margin-top: 10px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-weight: 400; text-transform: none;">
+                    <input type="checkbox" id="emailNotifications" checked> Email Notifications
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-weight: 400; text-transform: none;">
+                    <input type="checkbox" id="pushNotifications" checked> Push Notifications
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Service Alerts</label>
+                <div style="display: flex; gap: 15px; margin-top: 10px;">
+                  <label style="display: flex; align-items: center; gap: 8px; font-weight: 400; text-transform: none;">
+                    <input type="checkbox" id="bookingUpdates" checked> Booking Updates
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 8px; font-weight: 400; text-transform: none;">
+                    <input type="checkbox" id="reviewNotifications" checked> Review Notifications
+                  </label>
+                </div>
+              </div>
+
+              <div class="button-group">
+                <button type="button" class="btn btn-cancel" onclick="resetPreferences()">Cancel</button>
+                <button type="submit" class="btn btn-save">Save Preferences</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+
+    async function loadProfile() {
+      if (!token) {
+        window.location.href = '/user-login.html';
+        return;
+      }
+
+      try {
+        const response = await fetch('/auth/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          displayProfile(data.user);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('profileContent').style.display = 'block';
+      }
+    }
+
+    function displayProfile(user) {
+      document.getElementById('profileName').textContent = user.name;
+      document.getElementById('profileEmail').textContent = user.email;
+      document.getElementById('firstName').value = user.name.split(' ')[0] || '';
+      document.getElementById('lastName').value = user.name.split(' ')[1] || '';
+      document.getElementById('email').value = user.email;
+      document.getElementById('phone').value = user.phone || '';
+      document.getElementById('city').value = user.city || '';
+      document.getElementById('state').value = user.state || '';
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    async function updateProfile(e) {
+      e.preventDefault();
+
+      const updateData = {
+        name: document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value,
+        phone: document.getElementById('phone').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        bio: document.getElementById('bio').value
+      };
+
+      try {
+        const response = await fetch('/auth/profile', {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(updateData)
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          showSuccess('Profile updated successfully!');
+          setTimeout(() => loadProfile(), 1000);
+        } else {
+          showError(data.error || 'Failed to update profile');
+        }
+      } catch (error) {
+        showError('Error: ' + error.message);
+      }
+    }
+
+    async function changePassword(e) {
+      e.preventDefault();
+
+      const newPass = document.getElementById('newPassword').value;
+      const confirmPass = document.getElementById('confirmPassword').value;
+
+      if (newPass !== confirmPass) {
+        showError('Passwords do not match!');
+        return;
+      }
+
+      if (newPass.length < 8) {
+        showError('Password must be at least 8 characters!');
+        return;
+      }
+
+      alert('✅ Password change feature - integrate with backend');
+      resetSecurityForm();
+    }
+
+    async function updatePreferences(e) {
+      e.preventDefault();
+      alert('✅ Preferences saved!');
+      resetPreferences();
+    }
+
+    function deleteAccount() {
+      if (confirm('Are you sure? This action cannot be undone.')) {
+        alert('❌ Account deletion - contact support');
+      }
+    }
+
+    function uploadAvatar() {
+      alert('📷 Upload photo feature - file upload dialog');
+    }
+
+    function showSuccess(msg) {
+      const el = document.getElementById('successMsg');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 3000);
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('errorMsg');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    function resetForm() {
+      loadProfile();
+    }
+
+    function resetSecurityForm() {
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+    }
+
+    function resetPreferences() {
+      loadProfile();
+    }
+
+    function goBack() {
+      history.back();
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/user-login.html';
+    }
+
+    loadProfile();
+  </script>
+</body>
+</html>

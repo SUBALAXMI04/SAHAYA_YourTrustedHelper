@@ -80,6 +80,32 @@ router.post("/login", (req, res) => {
   });
 });
 
+// ADMIN LOGIN
+router.post("/admin-login", (req, res) => {
+  const { password } = req.body;
+  
+  if (!password) {
+    return res.status(400).json({ message: "Password required" });
+  }
+
+  // Admin password is hardcoded as "SAHO9"
+  if (password !== "SAHO9") {
+    return res.status(400).json({ message: "Invalid password" });
+  }
+
+  const token = jwt.sign({ role: "admin", email: "admin@sahaya.local" }, SECRET, { expiresIn: "7d" });
+  res.json({ 
+    success: true,
+    token, 
+    user: {
+      id: 1,
+      name: "Administrator",
+      email: "admin@sahaya.local",
+      role: "admin"
+    }
+  });
+});
+
 // GET CURRENT USER (Protected)
 router.get("/me", (req, res) => {
   const token = req.headers.authorization?.split(" ")[1];
@@ -90,13 +116,110 @@ router.get("/me", (req, res) => {
 
   try {
     const decoded = jwt.verify(token, SECRET);
-    const table = decoded.role === "provider" ? "providers" : "users";
+    let table, query;
+
+    if (decoded.role === "admin") {
+      table = "admin";
+      query = `SELECT id, name, email, phone, admin_id, role FROM ${table} WHERE id = ?`;
+    } else {
+      table = decoded.role === "provider" ? "providers" : "users";
+      query = `SELECT id, name, email, phone, role, rating FROM ${table} WHERE id = ?`;
+    }
     
-    db.get(`SELECT id, name, email, phone, role FROM ${table} WHERE id = ?`, [decoded.id], (err, user) => {
+    db.get(query, [decoded.id], (err, user) => {
       if (err) return res.status(500).json({ error: err.message });
       if (!user) return res.status(404).json({ error: "User not found" });
       
       res.json({ success: true, user });
+    });
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+// GET PROVIDER DETAILS (Public)
+router.get("/provider/:id", (req, res) => {
+  db.get(`SELECT id, name, email, phone, service, city, district, state, rating, reviews_count, total_jobs FROM providers WHERE id = ?`, [req.params.id], (err, provider) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!provider) return res.status(404).json({ error: "Provider not found" });
+    res.json({ success: true, provider });
+  });
+});
+
+// UPDATE USER/PROVIDER PROFILE (Protected)
+router.put("/profile", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
+
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    const { name, phone, houseNo, street, colony, area, city, district, state, pincode } = req.body;
+    const table = decoded.role === "provider" ? "providers" : "users";
+
+    db.run(
+      `UPDATE ${table} SET name = ?, phone = ?, houseNo = ?, street = ?, colony = ?, area = ?, city = ?, district = ?, state = ?, pincode = ?, updated_at = datetime('now') WHERE id = ?`,
+      [name, phone, houseNo, street, colony, area, city, district, state, pincode, decoded.id],
+      function(err) {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true, message: "Profile updated successfully" });
+      }
+    );
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+// ADMIN: GET ALL USERS
+router.get("/admin/users", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
+
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    if (decoded.role !== "admin") return res.status(403).json({ error: "Access denied" });
+
+    db.all(`SELECT id, name, email, phone, aadhaar, city, district, state, created_at FROM users`, [], (err, users) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ success: true, users, count: users.length });
+    });
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+// ADMIN: GET ALL PROVIDERS
+router.get("/admin/providers", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
+
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    if (decoded.role !== "admin") return res.status(403).json({ error: "Access denied" });
+
+    db.all(`SELECT id, name, email, phone, service, city, district, state, rating, total_jobs, account_status, created_at FROM providers`, [], (err, providers) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ success: true, providers, count: providers.length });
+    });
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+// ADMIN: DELETE ACCOUNT
+router.delete("/admin/delete-user/:id", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
+
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    if (decoded.role !== "admin") return res.status(403).json({ error: "Access denied" });
+
+    const { type } = req.body; // 'user' or 'provider'
+    const table = type === "provider" ? "providers" : "users";
+
+    db.run(`DELETE FROM ${table} WHERE id = ?`, [req.params.id], function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ success: true, message: `${type} deleted successfully` });
     });
   } catch (error) {
     res.status(401).json({ error: "Invalid token" });

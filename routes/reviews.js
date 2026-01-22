@@ -1,104 +1,149 @@
+const db = require("../database");
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
-const auth = require("./auth");
 
-module.exports = router;
+const SECRET = "sahaya_secret_key";
 
-/* =====================================
-   ADD REVIEW & RATING
-===================================== */
-router.post("/add", auth, (req, res) => {
-  const { booking_id, rating, review } = req.body;
+// SUBMIT REVIEW
+router.post("/submit", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
 
-  if (!rating || rating < 1 || rating > 5) {
-    return res.status(400).json({ error: "Rating must be 1-5" });
-  }
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    const { booking_id, rating, comment } = req.body;
 
-  db.get(
-    `SELECT * FROM bookings WHERE id = ? AND status = 'COMPLETED'`,
-    [booking_id],
-    (err, booking) => {
-      if (!booking) return res.status(400).json({ error: "Booking not completed" });
+    if (!booking_id || !rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ error: "Invalid rating (1-5)" });
+    }
 
-      let from_role, to_role, to_id;
-      if (req.user.role === "user" && req.user.id === booking.user_id) {
-        from_role = "user";
-        to_role = "provider";
-        to_id = booking.provider_id;
-      } else if (req.user.role === "provider" && req.user.id === booking.provider_id) {
-        from_role = "provider";
-        to_role = "user";
-        to_id = booking.user_id;
-      } else {
-        return res.status(403).json({ error: "Not allowed" });
-      }
+    // Get booking details
+    db.get(
+      `SELECT user_id, provider_id FROM bookings WHERE id = ?`,
+      [booking_id],
+      (err, booking) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (!booking) return res.status(404).json({ error: "Booking not found" });
 
-      db.run(
-        `INSERT INTO reviews (booking_id, from_role, rating, review) VALUES (?,?,?,?)`,
-        [booking_id, from_role, rating, review || ""],
-        function () {
-          // Update provider average rating if needed
-          if (from_role === "user") {
+        // Determine reviewer type
+        let from_user_id, to_user_id;
+        if (decoded.role === "user" && booking.user_id === decoded.id) {
+          from_user_id = booking.user_id;
+          to_user_id = booking.provider_id;
+        } else if (decoded.role === "provider" && booking.provider_id === decoded.id) {
+          from_user_id = booking.provider_id;
+          to_user_id = booking.user_id;
+        } else {
+          return res.status(403).json({ error: "Unauthorized" });
+        }
+
+        // Insert review
+        db.run(
+          `INSERT INTO reviews (booking_id, from_user_id, to_user_id, rating, comment, review_type, created_at)
+           VALUES (?, ?, ?, ?, ?, ?, datetime('now'))`,
+          [booking_id, from_user_id, to_user_id, rating, comment, decoded.role === "user" ? "provider" : "user"],
+          function(err) {
+            if (err) return res.status(500).json({ error: err.message });
+
+            // Update provider/user average rating
             db.get(
-              `SELECT AVG(rating) as avg_rating
-               FROM reviews r
-               JOIN bookings b ON b.id = r.booking_id
-               WHERE b.provider_id = ? AND r.from_role='user'`,
-              [booking.provider_id],
-              (err, row) => {
-                if (row?.avg_rating) {
-                  db.run(
-                    `UPDATE providers SET rating = ? WHERE id = ?`,
-                    [row.avg_rating.toFixed(2), booking.provider_id]
-                  );
-                }
+              `SELECT AVG(rating) as avg_rating, COUNT(*) as count FROM reviews WHERE to_user_id = ?`,
+              [to_user_id],
+              (err, stats) => {
+                if (err) return;
+
+                const table = decoded.role === "user" ? "providers" : "users";
+                db.run(
+                  `UPDATE ${table} SET rating = ?, reviews_count = ? WHERE id = ?`,
+                  [stats.avg_rating || 0, stats.count || 0, to_user_id]
+                );
               }
             );
+
+            res.json({ success: true, review_id: this.lastID, message: "Review submitted successfully" });
           }
-
-          res.json({ success: true });
-        }
-      );
-    }
-  );
+        );
+      }
+    );
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
 });
 
-/* =====================================
-   GET REVIEWS FOR A PROVIDER
-===================================== */
-router.get("/provider/:provider_id", auth, (req, res) => {
-  const provider_id = req.params.provider_id;
+// GET REVIEWS FOR USER/PROVIDER
+router.get("/for-user/:user_id", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
 
-  db.all(
-    `SELECT r.rating, r.review, r.from_role, b.user_id
-     FROM reviews r
-     JOIN bookings b ON b.id = r.booking_id
-     WHERE b.provider_id = ?`,
-    [provider_id],
-    (err, rows) => {
-      if (err) return res.status(500).json({ error: "Error fetching reviews" });
-      res.json(rows);
-    }
-  );
+  try {
+    jwt.verify(token, SECRET);
+
+    db.all(
+      `SELECT r.rating, r.comment, r.created_at, u.name as reviewer_name, u.role
+       FROM reviews r
+       JOIN users u ON r.from_user_id = u.id
+       WHERE r.to_user_id = ?
+       ORDER BY r.created_at DESC`,
+      [req.params.user_id],
+      (err, reviews) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true, reviews, count: reviews.length });
+      }
+    );
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
 });
 
-/* =====================================
-   GET REVIEWS FOR A USER
-===================================== */
-router.get("/user/:user_id", auth, (req, res) => {
-  const user_id = req.params.user_id;
+// GET MY REVIEWS (from logged-in user)
+router.get("/my-reviews", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
 
-  db.all(
-    `SELECT r.rating, r.review, r.from_role, b.provider_id
-     FROM reviews r
-     JOIN bookings b ON b.id = r.booking_id
-     WHERE b.user_id = ?`,
-    [user_id],
-    (err, rows) => {
-      if (err) return res.status(500).json({ error: "Error fetching reviews" });
-      res.json(rows);
-    }
-  );
+  try {
+    const decoded = jwt.verify(token, SECRET);
+
+    db.all(
+      `SELECT r.rating, r.comment, r.created_at, u.name as recipient_name
+       FROM reviews r
+       JOIN users u ON r.to_user_id = u.id
+       WHERE r.from_user_id = ?
+       ORDER BY r.created_at DESC`,
+      [decoded.id],
+      (err, reviews) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true, reviews, count: reviews.length });
+      }
+    );
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
+
+// GET REVIEWS ABOUT ME
+router.get("/about-me", (req, res) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "No token provided" });
+
+  try {
+    const decoded = jwt.verify(token, SECRET);
+
+    db.all(
+      `SELECT r.rating, r.comment, r.created_at, u.name as reviewer_name
+       FROM reviews r
+       JOIN users u ON r.from_user_id = u.id
+       WHERE r.to_user_id = ?
+       ORDER BY r.created_at DESC`,
+      [decoded.id],
+      (err, reviews) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json({ success: true, reviews, count: reviews.length });
+      }
+    );
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
 });
 
 module.exports = router;

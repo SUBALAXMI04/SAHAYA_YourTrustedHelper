@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earnings Dashboard - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4169E1 0%, #E0E6FF 50%, #D0D8F4 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(65, 105, 225, 0.1);
+    }
+
+    .nav-btn {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(65, 105, 225, 0.1);
+    }
+
+    .header-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #4169E1;
+      margin-bottom: 10px;
+    }
+
+    .header-subtitle {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(65, 105, 225, 0.1);
+      border-left: 4px solid #4169E1;
+    }
+
+    .stat-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #4169E1;
+      margin-bottom: 8px;
+    }
+
+    .stat-change {
+      font-size: 12px;
+      color: #27AE60;
+    }
+
+    .stat-change.negative {
+      color: #E74C3C;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 15px;
+      border-radius: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border: 2px solid #E0E6FF;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+      color: #4169E1;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      border-color: #4169E1;
+      color: white;
+    }
+
+    .tab-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(65, 105, 225, 0.1);
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #4169E1;
+      border-bottom: 2px solid #E0E6FF;
+      padding-bottom: 10px;
+    }
+
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px;
+      background: #F0F4FF;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .breakdown-label {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .breakdown-service {
+      font-weight: 700;
+      color: #4169E1;
+      margin-bottom: 3px;
+    }
+
+    .breakdown-count {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .breakdown-amount {
+      font-size: 18px;
+      font-weight: 700;
+      color: #27AE60;
+    }
+
+    .earnings-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .earnings-table th {
+      background: #E0E6FF;
+      padding: 12px;
+      text-align: left;
+      font-weight: 700;
+      color: #4169E1;
+      font-size: 13px;
+      text-transform: uppercase;
+      border-bottom: 2px solid #4169E1;
+    }
+
+    .earnings-table td {
+      padding: 12px;
+      border-bottom: 1px solid #E0E6FF;
+    }
+
+    .earnings-table tr:hover {
+      background: #F8F9FF;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-completed {
+      background: #D4EDDA;
+      color: #155724;
+    }
+
+    .status-pending {
+      background: #FFF3CD;
+      color: #856404;
+    }
+
+    .amount-highlight {
+      font-weight: 700;
+      color: #27AE60;
+    }
+
+    .chart-container {
+      background: #F8F9FF;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .simple-bar {
+      display: flex;
+      align-items: flex-end;
+      gap: 15px;
+      height: 200px;
+      margin: 20px 0;
+    }
+
+    .bar-item {
+      flex: 1;
+      text-align: center;
+    }
+
+    .bar {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      border-radius: 8px 8px 0 0;
+      width: 100%;
+      margin-bottom: 10px;
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    .bar:hover {
+      opacity: 0.8;
+    }
+
+    .bar-label {
+      font-size: 12px;
+      color: #666;
+      font-weight: 600;
+    }
+
+    .bar-value {
+      font-size: 12px;
+      color: #4169E1;
+      font-weight: 700;
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .empty-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #999;
+      margin-bottom: 10px;
+    }
+
+    .empty-text {
+      color: #CCC;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      border: 4px solid #E0E6FF;
+      border-top: 4px solid #4169E1;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .export-btn {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        flex-direction: column;
+      }
+
+      .tab-btn {
+        width: 100%;
+      }
+
+      .earnings-table {
+        font-size: 12px;
+      }
+
+      .earning-table th,
+      .earnings-table td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="nav-btn" onclick="goToDashboard()">← Provider Dashboard</button>
+    <div style="font-size: 20px; font-weight: 700; color: #4169E1;">Earnings Dashboard</div>
+    <button class="nav-btn" onclick="logout()">Logout</button>
+  </header>
+
+  <div class="container">
+    <div class="header-card">
+      <div class="header-title">💰 Your Earnings</div>
+      <div class="header-subtitle">Track your income and performance</div>
+    </div>
+
+    <div id="loadingState" class="loading">
+      <div class="spinner"></div>
+      <p>Loading earnings data...</p>
+    </div>
+
+    <div id="contentState" style="display: none;">
+      <!-- Statistics Cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Total Earned</div>
+          <div class="stat-value" id="totalEarned">₹0</div>
+          <div class="stat-change" id="earningsTrend">↑ 12% this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💳</div>
+          <div class="stat-label">Tips Received</div>
+          <div class="stat-value" id="tipsReceived">₹0</div>
+          <div class="stat-change">From customers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-label">Jobs Completed</div>
+          <div class="stat-value" id="jobsCompleted">0</div>
+          <div class="stat-change">Total services done</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-label">Average Rating</div>
+          <div class="stat-value" id="avgRating">0.0</div>
+          <div class="stat-change" id="ratingCount">0 reviews</div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+        <button class="tab-btn" onclick="switchTab('breakdown')">Service Breakdown</button>
+        <button class="tab-btn" onclick="switchTab('history')">Earnings History</button>
+        <button class="tab-btn" onclick="switchTab('reviews')">Recent Reviews</button>
+      </div>
+
+      <!-- Tab: Overview -->
+      <div id="overview" class="tab-content active">
+        <div class="section-title">📊 Monthly Earnings Chart</div>
+        <div class="chart-container">
+          <div class="simple-bar" id="earningsChart"></div>
+        </div>
+        <p style="text-align: center; color: #999; font-size: 13px;">Last 6 months</p>
+      </div>
+
+      <!-- Tab: Service Breakdown -->
+      <div id="breakdown" class="tab-content">
+        <div class="section-title">🎯 Earnings by Service Type</div>
+        <div id="breakdownContainer"></div>
+      </div>
+
+      <!-- Tab: History -->
+      <div id="history" class="tab-content">
+        <div class="section-title">📋 Recent Earnings</div>
+        <table class="earnings-table">
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Service</th>
+              <th>Amount</th>
+              <th>Tip</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="earningsHistory">
+            <tr>
+              <td colspan="6" style="text-align: center; padding: 40px; color: #999;">
+                Loading earnings history...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tab: Reviews -->
+      <div id="reviews" class="tab-content">
+        <div class="section-title">⭐ Recent Reviews from Customers</div>
+        <div id="reviewsContainer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    const userType = localStorage.getItem('userType');
+
+    if (!token || userType !== 'provider') {
+      window.location.href = '/provider-login.html';
+    }
+
+    async function loadEarningsData() {
+      try {
+        // Get provider profile
+        const profileResponse = await fetch('/auth/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const profileData = await profileResponse.json();
+
+        if (profileData.success) {
+          const provider = profileData.user;
+          displayStats(provider);
+
+          // Load reviews
+          loadReviews(provider.id);
+
+          // Load booking history
+          loadBookingHistory();
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('contentState').style.display = 'block';
+      }
+    }
+
+    function displayStats(provider) {
+      document.getElementById('totalEarned').textContent = `₹${provider.total_earned || 0}`;
+      document.getElementById('tipsReceived').textContent = `₹${provider.total_tips || 0}`;
+      document.getElementById('jobsCompleted').textContent = provider.total_jobs || 0;
+      document.getElementById('avgRating').textContent = (provider.rating || 0).toFixed(1);
+      document.getElementById('ratingCount').textContent = `${provider.reviews_count || 0} reviews`;
+
+      // Generate mock monthly chart data
+      generateMonthlyChart();
+
+      // Generate breakdown by service
+      generateServiceBreakdown();
+    }
+
+    function generateMonthlyChart() {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+      const earnings = [15000, 18000, 12000, 22000, 25000, 28000];
+      const maxEarning = Math.max(...earnings);
+
+      const chart = document.getElementById('earningsChart');
+      chart.innerHTML = earnings.map((earning, idx) => `
+        <div class="bar-item">
+          <div class="bar" style="height: ${(earning / maxEarning) * 150}px;">
+            <div class="bar-value">₹${earning/1000}K</div>
+          </div>
+          <div class="bar-label">${months[idx]}</div>
+        </div>
+      `).join('');
+    }
+
+    function generateServiceBreakdown() {
+      const services = [
+        { name: 'Plumbing', amount: 45000, count: 15 },
+        { name: 'Electrician', amount: 38000, count: 12 },
+        { name: 'Cleaning', amount: 28000, count: 25 },
+        { name: 'Carpentry', amount: 22000, count: 8 }
+      ];
+
+      const container = document.getElementById('breakdownContainer');
+      container.innerHTML = services.map(service => `
+        <div class="breakdown-item">
+          <div class="breakdown-label">
+            <div class="breakdown-service">${service.name}</div>
+            <div class="breakdown-count">${service.count} services completed</div>
+          </div>
+          <div class="breakdown-amount">₹${service.amount}</div>
+        </div>
+      `).join('');
+    }
+
+    async function loadBookingHistory() {
+      try {
+        const response = await fetch('/bookings/provider', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          displayBookingHistory(data.bookings.filter(b => b.status === 'completed'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    function displayBookingHistory(bookings) {
+      const tbody = document.getElementById('earningsHistory');
+      if (bookings.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 40px; color: #999;">
+              No completed bookings yet
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = bookings.slice(0, 10).map(booking => `
+        <tr>
+          <td>#${booking.id}</td>
+          <td>${booking.service_type}</td>
+          <td class="amount-highlight">₹${booking.price}</td>
+          <td>₹${booking.tip_amount || 0}</td>
+          <td>${new Date(booking.created_at).toLocaleDateString()}</td>
+          <td><span class="status-badge status-completed">Completed</span></td>
+        </tr>
+      `).join('');
+    }
+
+    async function loadReviews(providerId) {
+      try {
+        const response = await fetch(`/reviews/about-me`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          displayReviews(data.reviews);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    function displayReviews(reviews) {
+      const container = document.getElementById('reviewsContainer');
+      if (reviews.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">⭐</div>
+            <div class="empty-title">No reviews yet</div>
+            <div class="empty-text">Complete more bookings to receive reviews</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = reviews.slice(0, 5).map(review => `
+        <div style="background: #F0F4FF; padding: 15px; border-radius: 8px; margin-bottom: 12px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+            <div style="font-weight: 700; color: #4169E1;">${review.reviewer_name}</div>
+            <div style="color: #FFD700; font-size: 16px;">${'⭐'.repeat(review.rating)}</div>
+          </div>
+          <div style="font-size: 13px; color: #666; margin-bottom: 8px;">
+            ${new Date(review.created_at).toLocaleDateString()}
+          </div>
+          <div style="font-size: 13px; color: #999;">${review.comment || 'Great service!'}</div>
+        </div>
+      `).join('');
+    }
+
+    function switchTab(tabName) {
+      // Hide all tabs
+      document.querySelectorAll('.tab-content').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      // Remove active state from buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+
+      // Show selected tab
+      document.getElementById(tabName).classList.add('active');
+
+      // Add active state to clicked button
+      event.target.classList.add('active');
+    }
+
+    function goToDashboard() {
+      window.location.href = '/dashboard2.html';
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/provider-login.html';
+    }
+
+    // Initialize
+    loadEarningsData();
+  </script>
+</body>
+</html>

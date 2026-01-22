@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider Profile - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4169E1 0%, #E0E6FF 50%, #D0D8F4 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(65, 105, 225, 0.1);
+    }
+
+    .back-btn {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .profile-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(65, 105, 225, 0.15);
+    }
+
+    .profile-header {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 3px solid white;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+
+    .profile-name {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .profile-service {
+      font-size: 16px;
+      opacity: 0.9;
+      margin-bottom: 15px;
+    }
+
+    .rating-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .stars {
+      font-size: 24px;
+      color: #FFD700;
+    }
+
+    .rating-text {
+      font-size: 14px;
+    }
+
+    .profile-body {
+      padding: 30px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .info-card {
+      background: linear-gradient(135deg, #E0E6FF 0%, #D0D8F4 100%);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .info-label {
+      color: #4169E1;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .info-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: #4169E1;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #4169E1;
+      border-bottom: 2px solid #E0E6FF;
+      padding-bottom: 10px;
+    }
+
+    .contact-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: #F0F4FF;
+      border-radius: 8px;
+    }
+
+    .contact-icon {
+      font-size: 20px;
+    }
+
+    .contact-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .contact-label {
+      font-size: 11px;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .contact-value {
+      font-weight: 700;
+      color: #333;
+    }
+
+    .reviews-container {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .reviews-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .reviews-container::-webkit-scrollbar-track {
+      background: #E0E6FF;
+      border-radius: 10px;
+    }
+
+    .reviews-container::-webkit-scrollbar-thumb {
+      background: #4169E1;
+      border-radius: 10px;
+    }
+
+    .review-item {
+      background: #F0F4FF;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .review-author {
+      font-weight: 700;
+      color: #4169E1;
+    }
+
+    .review-rating {
+      color: #FFD700;
+      font-size: 14px;
+    }
+
+    .review-date {
+      font-size: 11px;
+      color: #999;
+    }
+
+    .review-text {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .empty-reviews {
+      text-align: center;
+      padding: 30px;
+      color: #999;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(65, 105, 225, 0.3);
+    }
+
+    .btn-secondary {
+      background: #E0E6FF;
+      color: #4169E1;
+    }
+
+    .btn-secondary:hover {
+      background: #D0D8F4;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      border: 4px solid #E0E6FF;
+      border-top: 4px solid #4169E1;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .profile-header {
+        padding: 30px 20px;
+      }
+
+      .profile-body {
+        padding: 20px;
+      }
+
+      .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <div style="font-size: 20px; font-weight: 700; color: #4169E1;">Provider Profile</div>
+    <div style="width: 80px;"></div>
+  </header>
+
+  <div class="container">
+    <div class="profile-card">
+      <div id="loadingState" class="loading">
+        <div class="spinner"></div>
+        <p>Loading profile...</p>
+      </div>
+
+      <div id="profileContent" style="display: none;">
+        <div class="profile-header">
+          <div class="profile-avatar">👨‍💼</div>
+          <div class="profile-name" id="providerName">John Doe</div>
+          <div class="profile-service" id="providerService">Electrician</div>
+          <div class="rating-display">
+            <div class="stars" id="ratingStars">⭐⭐⭐⭐⭐</div>
+            <div class="rating-text" id="ratingText">4.8 (42 reviews)</div>
+          </div>
+        </div>
+
+        <div class="profile-body">
+          <!-- Info Grid -->
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-label">Total Jobs</div>
+              <div class="info-value" id="totalJobs">0</div>
+            </div>
+            <div class="info-card">
+              <div class="info-label">Experience</div>
+              <div class="info-value" id="experience">5+</div>
+            </div>
+            <div class="info-card">
+              <div class="info-label">Response Time</div>
+              <div class="info-value" id="responseTime">1 hour</div>
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="section">
+            <div class="section-title">📞 Contact Information</div>
+            <div class="contact-info">
+              <div class="contact-item">
+                <div class="contact-icon">📱</div>
+                <div class="contact-details">
+                  <div class="contact-label">Phone</div>
+                  <div class="contact-value" id="providerPhone">+91 98765 43210</div>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">✉️</div>
+                <div class="contact-details">
+                  <div class="contact-label">Email</div>
+                  <div class="contact-value" id="providerEmail">john@email.com</div>
+                </div>
+              </div>
+              <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <div class="contact-details">
+                  <div class="contact-label">Location</div>
+                  <div class="contact-value" id="providerLocation">Bangalore, Karnataka</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Reviews Section -->
+          <div class="section">
+            <div class="section-title">⭐ Recent Reviews</div>
+            <div class="reviews-container" id="reviewsContainer">
+              <div class="empty-reviews">No reviews yet</div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <button class="btn btn-primary" onclick="connectProvider()">💬 Connect Now</button>
+            <button class="btn btn-secondary" onclick="saveProfessional()">❤️ Save Professional</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const providerId = urlParams.get('provider_id');
+    const token = localStorage.getItem('token');
+
+    async function loadProfile() {
+      if (!token || !providerId) {
+        alert('Invalid provider ID');
+        goBack();
+        return;
+      }
+
+      try {
+        const response = await fetch(`/services/${providerId}/profile`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          displayProfile(data.provider, data.reviews);
+        } else {
+          alert('Provider not found');
+          goBack();
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        alert('Failed to load profile');
+        goBack();
+      }
+    }
+
+    function displayProfile(provider, reviews) {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('profileContent').style.display = 'block';
+
+      document.getElementById('providerName').textContent = provider.name;
+      document.getElementById('providerService').textContent = provider.service;
+      document.getElementById('providerPhone').textContent = provider.phone || 'N/A';
+      document.getElementById('providerEmail').textContent = provider.email;
+      document.getElementById('providerLocation').textContent = `${provider.city}, ${provider.state}`;
+      document.getElementById('totalJobs').textContent = provider.total_jobs;
+
+      const rating = Math.round(provider.rating);
+      document.getElementById('ratingStars').textContent = '⭐'.repeat(rating) + '☆'.repeat(5 - rating);
+      document.getElementById('ratingText').textContent = `${provider.rating.toFixed(1)} (${provider.reviews_count} reviews)`;
+
+      // Display reviews
+      const reviewsContainer = document.getElementById('reviewsContainer');
+      if (reviews && reviews.length > 0) {
+        reviewsContainer.innerHTML = reviews.map(review => `
+          <div class="review-item">
+            <div class="review-header">
+              <div class="review-author">${review.reviewer_name}</div>
+              <div class="review-rating">${'⭐'.repeat(review.rating)}</div>
+            </div>
+            <div class="review-date">${new Date(review.created_at).toLocaleDateString()}</div>
+            <div class="review-text">${review.comment || 'Great service!'}</div>
+          </div>
+        `).join('');
+      } else {
+        reviewsContainer.innerHTML = '<div class="empty-reviews">No reviews yet</div>';
+      }
+
+      // Store provider ID for actions
+      window.currentProviderId = providerId;
+    }
+
+    async function connectProvider() {
+      try {
+        const response = await fetch('/chat/connect', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ provider_id: window.currentProviderId })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          alert('✅ Connection request sent!');
+          window.location.href = `/chat.html?chat_id=${data.chat_id}`;
+        } else {
+          alert(data.error);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to connect');
+      }
+    }
+
+    async function saveProfessional() {
+      try {
+        const response = await fetch(`/saved-professionals/save/${window.currentProviderId}`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          alert('✅ Professional saved!');
+        } else {
+          alert(data.error);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to save professional');
+      }
+    }
+
+    function goBack() {
+      history.back();
+    }
+
+    // Initialize
+    if (!token) {
+      window.location.href = '/user-login.html';
+    } else {
+      loadProfile();
+    }
+  </script>
+</body>
+</html>

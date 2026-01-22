@@ -11,9 +11,19 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --royal-blue: #4169E1;
+      --royal-blue-light: #5B7FED;
+      --moonlight-light: #E0E6FF;
+      --moonlight-dark: #D0D8F4;
+      --error: #E74C3C;
+      --success: #27AE60;
+      --text-dark: #333;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--royal-blue) 0%, var(--moonlight-light) 50%, var(--moonlight-dark) 100%);
       min-height: 100vh;
       padding: 40px 20px;
     }
@@ -34,7 +44,7 @@
     }
 
     .sidebar {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--royal-blue) 0%, var(--royal-blue-light) 100%);
       padding: 40px 30px;
       color: white;
       display: flex;
@@ -142,7 +152,7 @@
     label {
       font-size: 14px;
       font-weight: 600;
-      color: #333;
+      color: var(--text-dark);
       margin-bottom: 8px;
     }
 
@@ -159,8 +169,8 @@
 
     input:focus,
     select:focus {
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      border-color: var(--royal-blue);
+      box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.1);
     }
 
     input::placeholder {
@@ -177,7 +187,7 @@
       top: 50%;
       transform: translateY(-50%);
       cursor: pointer;
-      color: #667eea;
+      color: var(--royal-blue);
       font-size: 13px;
       font-weight: 600;
       user-select: none;
@@ -218,9 +228,9 @@
 
     .service-card:hover,
     .service-card.selected {
-      border-color: #667eea;
+      border-color: var(--royal-blue);
       background: #f0f3ff;
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 5px 15px rgba(65, 105, 225, 0.1);
     }
 
     .service-card input {
@@ -236,7 +246,7 @@
     .service-name {
       font-size: 13px;
       font-weight: 600;
-      color: #333;
+      color: var(--text-dark);
     }
 
     .file-input-wrapper {
@@ -246,13 +256,13 @@
     .file-input-label {
       display: block;
       padding: 12px 15px;
-      border: 2px dashed #667eea;
+      border: 2px dashed var(--royal-blue);
       border-radius: 8px;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
       background: #f9fafb;
-      color: #667eea;
+      color: var(--royal-blue);
       font-weight: 600;
       font-size: 14px;
     }
@@ -267,7 +277,7 @@
 
     .file-name {
       font-size: 12px;
-      color: #27ae60;
+      color: var(--success);
       margin-top: 5px;
     }
 
@@ -295,18 +305,18 @@
     }
 
     .btn-submit {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--royal-blue) 0%, var(--royal-blue-light) 100%);
       color: white;
     }
 
     .btn-submit:hover {
       transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 10px 20px rgba(65, 105, 225, 0.3);
     }
 
     .btn-back {
       background: #f0f0f0;
-      color: #333;
+      color: var(--text-dark);
     }
 
     .btn-back:hover {
@@ -322,7 +332,7 @@
     }
 
     .terms a {
-      color: #667eea;
+      color: var(--royal-blue);
       text-decoration: none;
       font-weight: 600;
     }
@@ -332,7 +342,7 @@
     }
 
     .error {
-      color: #e74c3c;
+      color: var(--error);
       font-size: 14px;
       margin-bottom: 20px;
       padding: 12px;
@@ -409,12 +419,12 @@
       <div class="sidebar">
         <div class="logo"><img src="LOGO.png" alt="SAHAYA Logo"></div>
         <h2>SAHAYA</h2>
-        <p>Join India's most trusted service provider network.</p>
+        <p>Connect with customers and grow your service business.</p>
         
         <div class="features">
           <div class="feature">
             <div class="feature-icon">✓</div>
-            <div>Verified Opportunities</div>
+            <div>Customer Access</div>
           </div>
           <div class="feature">
             <div class="feature-icon">✓</div>
@@ -466,39 +476,48 @@
           <div class="service-grid" id="serviceGrid">
             <label class="service-card" onclick="selectService(event, 'Barber')">
               <input type="radio" name="service" value="Barber">
-              <div class="service-name">💇 Barber</div>
+              <img src="images/BARBER.png" alt="Barber" class="service-image">
+              <div class="service-name">Barber</div>
             </label>
             <label class="service-card" onclick="selectService(event, 'Beautician')">
               <input type="radio" name="service" value="Beautician">
-              <div class="service-name">💄 Beautician</div>
+              <img src="images/BEAUTICIAN.png" alt="Beautician" class="service-image">
+              <div class="service-name">Beautician</div>
             </label>
             <label class="service-card" onclick="selectService(event, 'Hair Stylist')">
               <input type="radio" name="service" value="Hair Stylist">
-              <div class="service-name">✂️ Hair Stylist</div>
+              <img src="images/HAIRSTYLIST.png" alt="Hair Stylist" class="service-image">
+              <div class="service-name">Hair Stylist</div>
             </label>
             <label class="service-card" onclick="selectService(event, 'Carpenter')">
               <input type="radio" name="service" value="Carpenter">
-              <div class="service-name">🔨 Carpenter</div>
+              <img src="images/CARPENTER.png" alt="Carpenter" class="service-image">
+              <div class="service-name">Carpenter</div>
             </label>
             <label class="service-card" onclick="selectService(event, 'Electrician')">
               <input type="radio" name="service" value="Electrician">
-              <div class="service-name">⚡ Electrician</div>
+              <img src="images/ELECTRICIAN.png" alt="Electrician" class="service-image">
+              <div class="service-name">Electrician</div>
             </label>
             <label class="service-card" onclick="selectService(event, 'Plumber')">
               <input type="radio" name="service" value="Plumber">
-              <div class="service-name">🔧 Plumber</div>
+              <img src="images/PLUMBER.png" alt="Plumber" class="service-image">
+              <div class="service-name">Plumber</div>
             </label>
             <label class="service-card" onclick="selectService(event, 'Painter')">
               <input type="radio" name="service" value="Painter">
-              <div class="service-name">🎨 Painter</div>
+              <img src="images/PAINTER.png" alt="Painter" class="service-image">
+              <div class="service-name">Painter</div>
             </label>
             <label class="service-card" onclick="selectService(event, 'AC Technician')">
               <input type="radio" name="service" value="AC Technician">
-              <div class="service-name">❄️ AC Technician</div>
+              <img src="images/AC.png" alt="AC Technician" class="service-image">
+              <div class="service-name">AC Technician</div>
             </label>
             <label class="service-card" onclick="selectService(event, 'Driver')">
               <input type="radio" name="service" value="Driver">
-              <div class="service-name">🚗 Driver</div>
+              <img src="images/DRIVER.png" alt="Driver" class="service-image">
+              <div class="service-name">Driver</div>
             </label>
           </div>
 

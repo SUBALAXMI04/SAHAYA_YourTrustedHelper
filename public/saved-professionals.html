@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved Professionals - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #4169E1 0%, #E0E6FF 50%, #D0D8F4 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+
+    header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(65, 105, 225, 0.1);
+    }
+
+    .back-btn {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .page-header {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 30px;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 20px rgba(65, 105, 225, 0.1);
+      text-align: center;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #4169E1;
+      margin-bottom: 10px;
+    }
+
+    .page-subtitle {
+      color: #999;
+      font-size: 14px;
+    }
+
+    .filter-section {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 15px;
+      border: 2px solid #E0E6FF;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #4169E1;
+    }
+
+    .sort-select {
+      padding: 10px 15px;
+      border: 2px solid #E0E6FF;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .professionals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+
+    .professional-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(65, 105, 225, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .professional-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 35px rgba(65, 105, 225, 0.2);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .avatar {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.2);
+      border: 3px solid white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 10px;
+    }
+
+    .professional-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .professional-service {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .rating-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #E0E6FF;
+    }
+
+    .stars {
+      font-size: 16px;
+      color: #FFD700;
+    }
+
+    .rating-value {
+      font-weight: 700;
+      color: #4169E1;
+      font-size: 14px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .stat-item {
+      background: #F0F4FF;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 5px;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #4169E1;
+    }
+
+    .location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #666;
+      font-size: 12px;
+      margin-bottom: 15px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-connect {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+    }
+
+    .btn-connect:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(65, 105, 225, 0.3);
+    }
+
+    .btn-remove {
+      background: #FFE0E0;
+      color: #E74C3C;
+    }
+
+    .btn-remove:hover {
+      background: #FF4444;
+      color: white;
+    }
+
+    .btn-profile {
+      background: #E0E6FF;
+      color: #4169E1;
+    }
+
+    .btn-profile:hover {
+      background: #D0D8F4;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 40px;
+    }
+
+    .empty-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    .empty-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #999;
+      margin-bottom: 10px;
+    }
+
+    .empty-text {
+      color: #CCC;
+      margin-bottom: 30px;
+    }
+
+    .empty-btn {
+      background: linear-gradient(135deg, #4169E1 0%, #5B7FED 100%);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 80px 40px;
+    }
+
+    .spinner {
+      border: 4px solid #E0E6FF;
+      border-top: 4px solid #4169E1;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .professionals-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-section {
+        flex-direction: column;
+      }
+
+      .search-input,
+      .sort-select {
+        width: 100%;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <div style="font-size: 20px; font-weight: 700; color: #4169E1;">Saved Professionals</div>
+    <div style="width: 80px;"></div>
+  </header>
+
+  <div class="container">
+    <div class="page-header">
+      <div class="page-title">❤️ Your Saved Professionals</div>
+      <div class="page-subtitle">Quick access to your favorite service providers</div>
+    </div>
+
+    <div id="loadingState" class="loading">
+      <div class="spinner"></div>
+      <p>Loading your saved professionals...</p>
+    </div>
+
+    <div id="contentState" style="display: none;">
+      <!-- Filter Section -->
+      <div class="filter-section">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search by name or service...">
+        <select class="sort-select" id="sortSelect">
+          <option value="recent">Most Recent</option>
+          <option value="rating">Highest Rated</option>
+          <option value="jobs">Most Jobs</option>
+          <option value="name">Name (A-Z)</option>
+        </select>
+      </div>
+
+      <!-- Professionals Grid -->
+      <div id="emptyState" style="display: none;">
+        <div class="empty-state">
+          <div class="empty-icon">💼</div>
+          <div class="empty-title">No Saved Professionals Yet</div>
+          <div class="empty-text">Start saving your favorite professionals to access them quickly later</div>
+          <button class="empty-btn" onclick="goToSearch()">Browse Services</button>
+        </div>
+      </div>
+
+      <div class="professionals-grid" id="professionalsGrid"></div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem('token');
+    let allProfessionals = [];
+
+    async function loadSavedProfessionals() {
+      if (!token) {
+        window.location.href = '/user-login.html';
+        return;
+      }
+
+      try {
+        const response = await fetch('/saved-professionals/', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          allProfessionals = data.professionals;
+          displayProfessionals();
+        } else {
+          console.error('Failed to load professionals');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('contentState').style.display = 'block';
+      }
+    }
+
+    function displayProfessionals() {
+      const grid = document.getElementById('professionalsGrid');
+      const empty = document.getElementById('emptyState');
+
+      if (allProfessionals.length === 0) {
+        grid.style.display = 'none';
+        empty.style.display = 'block';
+        return;
+      }
+
+      grid.style.display = 'grid';
+      empty.style.display = 'none';
+
+      grid.innerHTML = allProfessionals.map(prof => `
+        <div class="professional-card">
+          <div class="card-header">
+            <div class="avatar">👨‍💼</div>
+            <div class="professional-name">${prof.name}</div>
+            <div class="professional-service">${prof.service}</div>
+          </div>
+          <div class="card-body">
+            <div class="rating-section">
+              <div class="stars">${'⭐'.repeat(Math.round(prof.rating))}</div>
+              <div class="rating-value">${prof.rating.toFixed(1)}</div>
+            </div>
+
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-label">Jobs Done</div>
+                <div class="stat-value">${prof.total_jobs}</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-label">Reviews</div>
+                <div class="stat-value">${prof.reviews_count}</div>
+              </div>
+            </div>
+
+            <div class="location">
+              📍 ${prof.city}, ${prof.state}
+            </div>
+
+            <div class="actions">
+              <button class="btn btn-profile" onclick="viewProfile(${prof.id})">View Profile</button>
+              <button class="btn btn-connect" onclick="connectProvider(${prof.id})">Connect</button>
+              <button class="btn btn-remove" onclick="removeSaved(${prof.id})">Remove</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function() {
+      filterProfessionals();
+    });
+
+    document.getElementById('sortSelect').addEventListener('change', function() {
+      sortProfessionals(this.value);
+    });
+
+    function filterProfessionals() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allProfessionals.filter(prof =>
+        prof.name.toLowerCase().includes(query) ||
+        prof.service.toLowerCase().includes(query) ||
+        prof.city.toLowerCase().includes(query)
+      );
+
+      const grid = document.getElementById('professionalsGrid');
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #999;">
+            No professionals found matching "${query}"
+          </div>
+        `;
+        return;
+      }
+
+      allProfessionals = [...allProfessionals].sort((a, b) => {
+        const queryA = (a.name + a.service).toLowerCase();
+        const queryB = (b.name + b.service).toLowerCase();
+        return queryA.localeCompare(queryB);
+      });
+
+      displayProfessionals();
+    }
+
+    function sortProfessionals(sortBy) {
+      const sorted = [...allProfessionals];
+
+      switch(sortBy) {
+        case 'rating':
+          sorted.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'jobs':
+          sorted.sort((a, b) => b.total_jobs - a.total_jobs);
+          break;
+        case 'name':
+          sorted.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        default:
+          // Most recent (original order)
+      }
+
+      allProfessionals = sorted;
+      displayProfessionals();
+    }
+
+    function viewProfile(providerId) {
+      window.location.href = `/provider-profile.html?provider_id=${providerId}`;
+    }
+
+    async function connectProvider(providerId) {
+      try {
+        const response = await fetch('/chat/connect', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ provider_id: providerId })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          alert('✅ Connection request sent!');
+          window.location.href = `/chat.html?chat_id=${data.chat_id}`;
+        } else {
+          alert(data.error);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to connect');
+      }
+    }
+
+    async function removeSaved(providerId) {
+      if (!confirm('Remove this professional from saved?')) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/saved-professionals/remove/${providerId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          allProfessionals = allProfessionals.filter(p => p.id !== providerId);
+          displayProfessionals();
+          alert('✅ Professional removed!');
+        } else {
+          alert(data.error);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to remove professional');
+      }
+    }
+
+    function goBack() {
+      history.back();
+    }
+
+    function goToSearch() {
+      window.location.href = '/find-service.html';
+    }
+
+    // Initialize
+    loadSavedProfessionals();
+  </script>
+</body>
+</html>
