@@ -1,31 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>User Dashboard</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider Dashboard - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f6fa;
+      color: #333;
+    }
+
+    /* Header */
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #666;
+      font-weight: 600;
+      transition: color 0.3s ease;
+      margin-right: 20px;
+    }
+
+    nav a:hover {
+      color: #667eea;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .user-info {
+      text-align: right;
+      font-size: 14px;
+    }
+
+    .user-name {
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    .logout-btn {
+      padding: 8px 20px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: #c0392b;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    /* Welcome Section */
+    .welcome-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .welcome-section h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .welcome-section p {
+      font-size: 16px;
+      opacity: 0.95;
+    }
+
+    /* Stats Section */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      color: #667eea;
+      font-weight: 700;
+    }
+
+    .stat-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    /* Content Grid */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+    }
+
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .job-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .job-item {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .job-item:hover {
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+      border-color: #667eea;
+    }
+
+    .job-info h4 {
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .job-info p {
+      font-size: 13px;
+      color: #666;
+    }
+
+    .job-action {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-action {
+      padding: 6px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-accept {
+      background: #27ae60;
+      color: white;
+    }
+
+    .btn-accept:hover {
+      background: #229954;
+    }
+
+    .btn-decline {
+      background: #e74c3c;
+      color: white;
+    }
+
+    .btn-decline:hover {
+      background: #c0392b;
+    }
+
+    .profile-section {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: white;
+    }
+
+    .profile-info h3 {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .profile-info p {
+      font-size: 14px;
+      color: #666;
+      margin: 3px 0;
+    }
+
+    .rating-display {
+      color: #f39c12;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .profile-edit-btn {
+      background: #667eea;
+      color: white;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .profile-edit-btn:hover {
+      background: #5568d3;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-completed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    @media (max-width: 768px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .welcome-section h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="header">User Dashboard</div>
-<div class="container">
-  <h3>Book a Service</h3>
-  <select id="service">
-    <option value="Plumber">Plumber</option>
-    <option value="Barber">Barber</option>
-  </select>
-  <input type="text" id="location" placeholder="Your location"><br><br>
-  <input type="number" id="price" placeholder="Proposed Price"><br><br>
-  <button onclick="bookService()">Book</button>
+  <header>
+    <div class="header-left">
+      <div class="logo">SAHAYA</div>
+      <nav>
+        <a href="#jobs">Pending Jobs</a>
+        <a href="#profile">Profile</a>
+        <a href="#reviews">Reviews</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="user-info">
+        <div class="user-name" id="userName">Provider</div>
+        <small>Service Provider Account</small>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </header>
 
-  <h3>My Bookings</h3>
-  <table id="bookings">
-    <thead><tr><th>ID</th><th>Provider</th><th>Status</th><th>Action</th></tr></thead>
-    <tbody></tbody>
-  </table>
-</div>
+  <div class="container">
+    <div class="welcome-section">
+      <h1>Welcome, <span id="userNameWelcome">Provider</span>! 👋</h1>
+      <p>Manage your jobs and grow your business with SAHAYA</p>
+    </div>
 
-<script>
-const token = localStorage.getItem('token');
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📋</div>
+        <h3>Pending Jobs</h3>
+        <div class="stat-number" id="pendingJobs">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <h3>Completed Jobs</h3>
+        <div class="stat-number" id="completedJobs">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⭐</div>
+        <h3>Rating</h3>
+        <div class="stat-number" id="rating">4.8</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <h3>Total Earned</h3>
+        <div class="stat-number" id="totalEarned">₹0</div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- Profile -->
+      <div class="card" id="profile">
+        <h2>👤 Your Profile</h2>
+        <div class="profile-section">
+          <div class="profile-avatar" id="profileAvatar">🔧</div>
+          <div class="profile-info">
+            <h3 id="profileName">Provider Name</h3>
+            <p id="profileService">Service Type</p>
+            <p id="profilePhone">Phone</p>
+            <p class="rating-display">⭐ 4.8 (50 reviews)</p>
+          </div>
+        </div>
+        <button class="profile-edit-btn" onclick="editProfile()">Edit Profile</button>
+      </div>
+
+      <!-- Pending Jobs -->
+      <div class="card" id="jobs">
+        <h2>📋 Pending Jobs</h2>
+        <div class="job-list" id="jobsList">
+          <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <p>No pending jobs. Check back later!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load provider info from localStorage
+    function loadProviderInfo() {
+      const token = localStorage.getItem('token');
+      const role = localStorage.getItem('role');
+      
+      if (!token || role !== 'provider') {
+        window.location.href = '/provider-login.html';
+        return;
+      }
+
+      // Simulate provider data (in real app, fetch from backend)
+      const providerName = localStorage.getItem('providerName') || 'Provider';
+      document.getElementById('userName').textContent = providerName;
+      document.getElementById('userNameWelcome').textContent = providerName.split(' ')[0];
+      document.getElementById('profileName').textContent = providerName;
+    }
+
+    function editProfile() {
+      alert('Edit profile feature coming soon!');
+    }
+
+    function acceptJob(jobId) {
+      alert(`Accepted job #${jobId}`);
+    }
+
+    function declineJob(jobId) {
+      alert(`Declined job #${jobId}`);
+    }
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('providerName');
+        window.location.href = '/index.html';
+      }
+    }
+
+    // Initialize on page load
+    loadProviderInfo();
+  </script>
+</body>
+</html>
 
 async function bookService(){
   const service = document.getElementById('service').value;

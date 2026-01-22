@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Sign Up - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .form-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 0;
+    }
+
+    .sidebar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 40px 30px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    
+    .logo img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .sidebar h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .sidebar p {
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.9;
+      margin-bottom: 30px;
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .feature {
+      display: flex;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .form-content {
+      padding: 40px;
+      overflow-y: auto;
+      max-height: 90vh;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      color: #333;
+      font-weight: 700;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    .form-grid.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    input {
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      outline: none;
+      font-family: inherit;
+    }
+
+    input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    input::placeholder {
+      color: #999;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #667eea;
+      font-size: 13px;
+      font-weight: 600;
+      user-select: none;
+      background: white;
+      padding: 0 5px;
+    }
+
+    .password-wrapper input {
+      padding-right: 45px;
+    }
+
+    .input-hint {
+      font-size: 12px;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-back {
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    .btn-back:hover {
+      background: #e0e0e0;
+    }
+
+    .terms {
+      font-size: 12px;
+      color: #999;
+      margin-top: 15px;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .terms a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .terms a:hover {
+      text-decoration: underline;
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: #fadbd8;
+      border-radius: 8px;
+      display: none;
+      border-left: 4px solid #e74c3c;
+    }
+
+    .success {
+      color: #27ae60;
+      font-size: 14px;
+      margin-bottom: 20px;
+      padding: 12px;
+      background: #d5f4e6;
+      border-radius: 8px;
+      display: none;
+      border-left: 4px solid #27ae60;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: #667eea;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .form-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        padding: 30px;
+      }
+
+      .form-content {
+        padding: 30px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-wrapper">
+      <div class="sidebar">
+        <div class="logo"><img src="LOGO.png" alt="SAHAYA Logo"></div>
+        <h2>SAHAYA</h2>
+        <p>Join our trusted community and discover professional help at your doorstep.</p>
+        
+        <div class="features">
+          <div class="feature">
+            <div class="feature-icon">✓</div>
+            <div>Verified Professionals</div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">✓</div>
+            <div>Secure Transactions</div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">✓</div>
+            <div>Transparent Pricing</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-content">
+        <h1>Create Your Account</h1>
+        <p class="subtitle">Sign up to book trusted services in your area</p>
+
+        <div class="error" id="errorMsg"></div>
+        <div class="success" id="successMsg"></div>
+
+        <form id="signupForm" onsubmit="handleSignup(event)">
+          <!-- Personal Information -->
+          <div class="section-title">Personal Information</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="uName">Full Name *</label>
+              <input type="text" id="uName" placeholder="Enter your full name" required>
+            </div>
+            <div class="form-group">
+              <label for="uEmail">Email Address *</label>
+              <input type="email" id="uEmail" placeholder="your@email.com" required>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="uPhone">Phone Number *</label>
+              <input type="tel" id="uPhone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" required>
+              <span class="input-hint">Format: 10 digits</span>
+            </div>
+            <div class="form-group">
+              <label for="uAadhaar">Aadhaar Number *</label>
+              <input type="text" id="uAadhaar" placeholder="12-digit Aadhaar" maxlength="12" inputmode="numeric" required>
+              <span class="input-hint">Format: 12 digits</span>
+            </div>
+          </div>
+
+          <!-- Address Details -->
+          <div class="section-title">Address Details</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="houseNo">House/Building Number *</label>
+              <input type="text" id="houseNo" placeholder="e.g., 123/A" required>
+            </div>
+            <div class="form-group">
+              <label for="street">Street Name *</label>
+              <input type="text" id="street" placeholder="e.g., Main Street" required>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="colony">Colony/Society Name *</label>
+              <input type="text" id="colony" placeholder="Enter colony/society name" required>
+            </div>
+            <div class="form-group">
+              <label for="area">Area *</label>
+              <input type="text" id="area" placeholder="Enter area name" required>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="city">City *</label>
+              <input type="text" id="city" placeholder="Enter city" required>
+            </div>
+            <div class="form-group">
+              <label for="district">District *</label>
+              <input type="text" id="district" placeholder="Enter district" required>
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="state">State *</label>
+              <input type="text" id="state" placeholder="Enter state" required>
+            </div>
+            <div class="form-group">
+              <label for="pincode">Pincode *</label>
+              <input type="text" id="pincode" placeholder="6-digit pincode" maxlength="6" inputmode="numeric" required>
+              <span class="input-hint">Format: 6 digits</span>
+            </div>
+          </div>
+
+          <!-- Security -->
+          <div class="section-title">Security</div>
+          <div class="form-grid full">
+            <div class="form-group">
+              <label for="uPwd">Password *</label>
+              <div class="password-wrapper">
+                <input type="password" id="uPwd" placeholder="Create a strong password" required>
+                <span class="toggle-password" onclick="togglePassword('uPwd')">Show</span>
+              </div>
+              <span class="input-hint">Min 8 chars, 1 uppercase, 1 lowercase, 1 special character</span>
+            </div>
+          </div>
+
+          <div class="form-grid full">
+            <div class="form-group">
+              <label for="uCpwd">Confirm Password *</label>
+              <div class="password-wrapper">
+                <input type="password" id="uCpwd" placeholder="Confirm your password" required>
+                <span class="toggle-password" onclick="togglePassword('uCpwd')">Show</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Creating your account...</p>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-back" onclick="window.history.back()">Back</button>
+            <button type="submit" class="btn btn-submit" id="submitBtn">Create Account</button>
+          </div>
+
+          <p class="terms">
+            By signing up, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Auto-capitalize text inputs
+    ['uName', 'street', 'colony', 'area', 'city', 'district', 'state'].forEach(id => {
+      document.getElementById(id).addEventListener('input', (e) => {
+        e.target.value = e.target.value.toUpperCase();
+      });
+    });
+
+    // Only numbers for specific fields
+    ['uPhone', 'uAadhaar', 'houseNo', 'pincode'].forEach(id => {
+      document.getElementById(id).addEventListener('input', (e) => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+      });
+    });
+
+    function togglePassword(id) {
+      const input = document.getElementById(id);
+      const btn = event.target;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Hide';
+      } else {
+        input.type = 'password';
+        btn.textContent = 'Show';
+      }
+    }
+
+    function showError(msg) {
+      const errorMsg = document.getElementById('errorMsg');
+      errorMsg.textContent = msg;
+      errorMsg.style.display = 'block';
+      document.getElementById('successMsg').style.display = 'none';
+    }
+
+    function showSuccess(msg) {
+      const successMsg = document.getElementById('successMsg');
+      successMsg.textContent = msg;
+      successMsg.style.display = 'block';
+      document.getElementById('errorMsg').style.display = 'none';
+    }
+
+    async function handleSignup(e) {
+      e.preventDefault();
+
+      const data = {
+        role: 'user',
+        name: document.getElementById('uName').value,
+        email: document.getElementById('uEmail').value,
+        phone: document.getElementById('uPhone').value,
+        aadhaar: document.getElementById('uAadhaar').value,
+        houseNo: document.getElementById('houseNo').value,
+        street: document.getElementById('street').value,
+        colony: document.getElementById('colony').value,
+        area: document.getElementById('area').value,
+        city: document.getElementById('city').value,
+        district: document.getElementById('district').value,
+        state: document.getElementById('state').value,
+        pincode: document.getElementById('pincode').value,
+        password: document.getElementById('uPwd').value,
+        confirmPassword: document.getElementById('uCpwd').value
+      };
+
+      // Validation
+      for (let key in data) {
+        if (!data[key]) {
+          showError('All fields are mandatory');
+          return;
+        }
+      }
+
+      if (data.phone.length !== 10) {
+        showError('Phone number must be 10 digits');
+        return;
+      }
+
+      if (data.aadhaar.length !== 12) {
+        showError('Aadhaar must be 12 digits');
+        return;
+      }
+
+      if (data.pincode.length !== 6) {
+        showError('Pincode must be 6 digits');
+        return;
+      }
+
+      if (data.password !== data.confirmPassword) {
+        showError('Passwords do not match');
+        return;
+      }
+
+      const strongPwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}$/;
+      if (!strongPwd.test(data.password)) {
+        showError('Password must contain: uppercase, lowercase, special character, and 8+ characters');
+        return;
+      }
+
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('submitBtn').disabled = true;
+
+      try {
+        const response = await fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+          // Store user data in localStorage for easy access
+          localStorage.setItem('userName', data.name);
+          localStorage.setItem('userEmail', data.email);
+          
+          showSuccess('Account created successfully! Redirecting to login...');
+          setTimeout(() => {
+            window.location.href = '/user-login.html';
+          }, 2000);
+        } else {
+          showError(result.error || 'Signup failed. Please try again.');
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        showError('An error occurred. Please try again.');
+      } finally {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('submitBtn').disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

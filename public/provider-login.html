@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider Login - SAHAYA</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 450px;
+      padding: 40px;
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 15px;
+    }
+    
+    .logo img {
+      width: 100%;
+      height: 100%;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #333;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    input::placeholder {
+      color: #999;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #667eea;
+      font-size: 14px;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      font-size: 14px;
+    }
+
+    .remember-forgot a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .remember-forgot a:hover {
+      text-decoration: underline;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+      color: #ccc;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #e0e0e0;
+    }
+
+    .divider span {
+      padding: 0 15px;
+      color: #999;
+      font-size: 14px;
+    }
+
+    .signup-link {
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .signup-link a {
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+
+    .role-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .role-btn {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      color: #666;
+      transition: all 0.3s ease;
+    }
+
+    .role-btn.active {
+      border-color: #667eea;
+      background: #667eea;
+      color: white;
+    }
+
+    .error {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .success {
+      color: #27ae60;
+      font-size: 14px;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      color: #667eea;
+    }
+
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #667eea;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .role-selector {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-section">
+      <div class="logo"><img src="LOGO.png" alt="SAHAYA Logo"></div>
+      <h1>SAHAYA</h1>
+      <p class="subtitle">Service Provider Platform</p>
+    </div>
+
+    <div class="role-selector">
+      <button class="role-btn" onclick="selectRole('user')">User</button>
+      <button class="role-btn active" onclick="selectRole('provider')">Provider</button>
+    </div>
+
+    <div class="success" id="successMsg"></div>
+    <div class="error" id="errorMsg"></div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="your@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="Enter your password" required>
+          <span class="toggle-password" onclick="togglePassword()">Show</span>
+        </div>
+      </div>
+
+      <div class="remember-forgot">
+        <div class="checkbox">
+          <input type="checkbox" id="remember">
+          <label for="remember" style="margin: 0;">Remember me</label>
+        </div>
+        <a href="#" onclick="alert('Password reset feature coming soon!')">Forgot password?</a>
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Logging in...</p>
+      </div>
+
+      <button type="submit" class="btn-login" id="loginBtn">Login</button>
+    </form>
+
+    <div class="divider">
+      <span>New to SAHAYA?</span>
+    </div>
+
+    <div class="signup-link">
+      <p>Don't have an account? <a href="/provider-signup.html">Sign up now</a></p>
+    </div>
+  </div>
+
+  <script>
+    let selectedRole = 'provider';
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function togglePassword() {
+      const input = document.getElementById('password');
+      const btn = document.querySelector('.toggle-password');
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Hide';
+      } else {
+        input.type = 'password';
+        btn.textContent = 'Show';
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+      const successMsg = document.getElementById('successMsg');
+      const loading = document.getElementById('loading');
+      const loginBtn = document.getElementById('loginBtn');
+
+      errorMsg.style.display = 'none';
+      successMsg.style.display = 'none';
+      loading.style.display = 'none';
+
+      if (!email || !password) {
+        errorMsg.textContent = 'Please fill in all fields';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      loading.style.display = 'block';
+      loginBtn.disabled = true;
+
+      try {
+        const response = await fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            role: selectedRole,
+            email: email,
+            password: password
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.token) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('role', selectedRole);
+          if (data.user) {
+            localStorage.setItem('providerName', data.user.name);
+            localStorage.setItem('providerEmail', data.user.email);
+          }
+          successMsg.textContent = 'Login successful! Redirecting...';
+          successMsg.style.display = 'block';
+
+          const dashboardMap = {
+            'user': '/dashboard1.html',
+            'provider': '/dashboard2.html'
+          };
+
+          setTimeout(() => {
+            window.location.href = dashboardMap[selectedRole];
+          }, 1500);
+        } else {
+          errorMsg.textContent = data.error || 'Login failed. Please check your credentials.';
+          errorMsg.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        errorMsg.textContent = 'An error occurred. Please try again.';
+        errorMsg.style.display = 'block';
+      } finally {
+        loading.style.display = 'none';
+        loginBtn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

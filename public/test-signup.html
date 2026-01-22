@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Test Signup</title>
+</head>
+<body>
+  <h1>API Test</h1>
+  <button onclick="testSignup()">Test Signup API</button>
+  <pre id="response"></pre>
+  
+  <script>
+    async function testSignup() {
+      try {
+        const response = await fetch('/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            role: 'user',
+            name: 'Test User',
+            email: 'test' + Date.now() + '@test.com',
+            phone: '9876543210',
+            aadhaar: '123456789012',
+            houseNo: '123',
+            street: 'Main St',
+            colony: 'Test',
+            area: 'Test',
+            city: 'Test',
+            district: 'Test',
+            state: 'Test',
+            pincode: '123456',
+            password: 'Abc123!@',
+            confirmPassword: 'Abc123!@'
+          })
+        });
+        
+        const data = await response.json();
+        document.getElementById('response').textContent = JSON.stringify(data, null, 2) + '\n\nStatus: ' + response.status;
+      } catch(e) {
+        document.getElementById('response').textContent = 'Error: ' + e.message;
+      }
+    }
+  </script>
+</body>
+</html>

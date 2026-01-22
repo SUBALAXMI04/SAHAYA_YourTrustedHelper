@@ -1,79 +1,512 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>SAHAYA</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #022140;
-    font-family: Arial, sans-serif;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAHAYA - Your Trusted Helper</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  .container {
-    text-align: center;
-  }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+    }
 
-  .header {
-    font-size: 48px;
-    font-weight: bold;
-    margin-bottom: 40px;
-  }
+    /* Header & Navigation */
+    header {
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-  .btn {
-    width: 260px;
-    padding: 15px;
-    margin: 12px 0;
-    font-size: 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #f5f6f9;
-    color: rgb(4, 4, 74);
-  }
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-  .btn:hover {
-    background: #4c596d;
-  }
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      color: #667eea;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-  .button-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
- }
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+    }
 
-</style>
+    .nav-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: #667eea;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 10px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-login {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-login:hover {
+      background: #f0f3ff;
+    }
+
+    .btn-signup {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-signup:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 18px;
+      margin-bottom: 30px;
+      opacity: 0.95;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .cta-btn {
+      padding: 15px 40px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .cta-user {
+      background: white;
+      color: #667eea;
+    }
+
+    .cta-user:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .cta-provider {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+    }
+
+    .cta-provider:hover {
+      background: white;
+      color: #667eea;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 80px 40px;
+      background: #f9fafb;
+    }
+
+    .section-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 50px;
+      color: #1a1a1a;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .feature-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .feature-card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #1a1a1a;
+    }
+
+    .feature-card p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* How It Works */
+    .how-it-works {
+      padding: 80px 40px;
+      background: white;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+    }
+
+    .step {
+      text-align: center;
+    }
+
+    .step-number {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 auto 15px;
+    }
+
+    .step h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #1a1a1a;
+    }
+
+    .step p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* Services Grid */
+    .services-section {
+      padding: 80px 40px;
+      background: #f9fafb;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .service-item {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .service-item:hover {
+      border-color: #667eea;
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+    }
+
+    .service-emoji {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .service-item p {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    /* Footer */
+    footer {
+      background: #1a1a1a;
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+
+    footer p {
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+
+      .cta-btn {
+        width: 100%;
+      }
+
+      .section-title {
+        font-size: 28px;
+      }
+
+      .features-grid {
+        gap: 20px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="container">
-  <div class="header">SAHAYA</div>
-  <div class="button-group">
-    <button class="btn" onclick="goTo('admin')">👮 ADMIN</button>
-  </div>
-  <div class="button-group">
-    <button class="btn" onclick="goTo('user')">👤 USER</button>
-  </div>
-  <div class="button-group">
-    <button class="btn" onclick="goTo('provider')">🛠️ SERVICE PROVIDER</button>
-  </div>
-</div>
+  <!-- Navigation -->
+  <header>
+    <nav>
+      <div class="logo">
+        <span>S</span>
+        <span>SAHAYA</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-buttons">
+        <a href="/user-login.html" class="btn btn-login">Login</a>
+        <a href="/user-signup.html" class="btn btn-signup">Sign Up</a>
+      </div>
+    </nav>
+  </header>
 
-<script>
-function goTo(role) {
-  if (role === 'admin') {
-    window.location = 'admin.html';
-  } else if (role === 'user') {
-    window.location = 'user.html';
-  } else if (role === 'provider') {
-    window.location = 'provider.html';
-  }
-}
-</script>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Your Trusted Helper Platform</h1>
+      <p>Connecting millions with skilled professionals for home, office, and business needs</p>
+      <div class="cta-buttons">
+        <a href="/user-signup.html" class="cta-btn cta-user">Find Services</a>
+        <a href="/provider-signup.html" class="cta-btn cta-provider">Become a Provider</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section" id="features">
+    <div class="section-container">
+      <h2 class="section-title">Why Choose SAHAYA?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Verified Professionals</h3>
+          <p>All service providers are thoroughly verified and background checked for your peace of mind.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💳</div>
+          <h3>Secure Payments</h3>
+          <p>Safe and transparent payment options with buyer protection guarantee.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Easy Booking</h3>
+          <p>Book services in just a few clicks with real-time tracking and updates.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>Quality Assured</h3>
+          <p>Read genuine reviews and ratings from other customers to ensure best service.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-container">
+      <h2 class="section-title">How It Works</h2>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Sign Up</h3>
+          <p>Create your account in seconds with basic information.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Find Services</h3>
+          <p>Browse through verified professionals in your area.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Book & Pay</h3>
+          <p>Schedule service and pay securely through our platform.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Get Service</h3>
+          <p>Professional arrives at your location at scheduled time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services-section" id="services">
+    <div class="section-container">
+      <h2 class="section-title">Popular Services</h2>
+      <div class="services-grid">
+        <div class="service-item">
+          <div class="service-emoji">💇</div>
+          <p>Barber</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">💄</div>
+          <p>Beautician</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">🔨</div>
+          <p>Carpenter</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">⚡</div>
+          <p>Electrician</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">🔧</div>
+          <p>Plumber</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">🎨</div>
+          <p>Painter</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">❄️</div>
+          <p>AC Technician</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">🚗</div>
+          <p>Driver</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">✂️</div>
+          <p>Hair Stylist</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">🏠</div>
+          <p>House Maid</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">👶</div>
+          <p>Baby Sitter</p>
+        </div>
+        <div class="service-item">
+          <div class="service-emoji">👨‍🍳</div>
+          <p>Cook</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact">
+    <p>&copy; 2026 SAHAYA - Your Trusted Helper. All rights reserved.</p>
+    <p>
+      <a href="#">Privacy Policy</a> | 
+      <a href="#">Terms of Service</a> | 
+      <a href="#">Contact Us</a>
+    </p>
+    <p>📧 support@sahaya.com | 📞 1800-SAHAYA-1</p>
+  </footer>
 </body>
 </html>
