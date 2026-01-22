@@ -210,6 +210,10 @@
       transition: all 0.3s ease;
       text-align: center;
       background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
     }
 
     .service-card:hover,
@@ -221,6 +225,12 @@
 
     .service-card input {
       display: none;
+    }
+
+    .service-image {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
     }
 
     .service-name {

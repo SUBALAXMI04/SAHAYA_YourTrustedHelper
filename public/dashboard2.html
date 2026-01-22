@@ -141,8 +141,16 @@
     }
 
     .stat-icon {
-      font-size: 32px;
-      margin-bottom: 10px;
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+      margin: 0 auto 10px;
     }
 
     /* Content Grid */
@@ -347,7 +355,7 @@
 
   <div class="container">
     <div class="welcome-section">
-      <h1>Welcome, <span id="userNameWelcome">Provider</span>! 👋</h1>
+      <h1>Welcome, <span id="userNameWelcome">Provider</span>!</h1>
       <p>Manage your jobs and grow your business with SAHAYA</p>
     </div>
 
@@ -358,17 +366,17 @@
         <div class="stat-number" id="pendingJobs">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon">✔</div>
         <h3>Completed Jobs</h3>
         <div class="stat-number" id="completedJobs">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">⭐</div>
+        <div class="stat-icon">★</div>
         <h3>Rating</h3>
         <div class="stat-number" id="rating">4.8</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon">💰</div>
+        <div class="stat-icon">💵</div>
         <h3>Total Earned</h3>
         <div class="stat-number" id="totalEarned">₹0</div>
       </div>
@@ -379,12 +387,12 @@
       <div class="card" id="profile">
         <h2>👤 Your Profile</h2>
         <div class="profile-section">
-          <div class="profile-avatar" id="profileAvatar">🔧</div>
+          <div class="profile-avatar" id="profileAvatar">⚙</div>
           <div class="profile-info">
             <h3 id="profileName">Provider Name</h3>
             <p id="profileService">Service Type</p>
             <p id="profilePhone">Phone</p>
-            <p class="rating-display">⭐ 4.8 (50 reviews)</p>
+            <p class="rating-display">★ 4.8 (50 reviews)</p>
           </div>
         </div>
         <button class="profile-edit-btn" onclick="editProfile()">Edit Profile</button>
