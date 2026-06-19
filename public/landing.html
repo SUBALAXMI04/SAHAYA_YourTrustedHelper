@@ -30,7 +30,6 @@
       color: var(--text-dark);
     }
 
-    /* Header Navigation */
     header {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
@@ -78,15 +77,32 @@
     }
 
     .theme-toggle {
-      background: none;
-      border: none;
-      font-size: 24px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border-light);
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, background 0.3s ease;
+      color: var(--royal-blue);
     }
 
     .theme-toggle:hover {
-      transform: scale(1.2);
+      transform: scale(1.05);
+      background: white;
+    }
+
+    .theme-toggle svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .btn {
@@ -141,23 +157,75 @@
       font-size: 1.2rem;
       margin-bottom: 2rem;
       opacity: 0.95;
-      max-width: 600px;
+      max-width: 700px;
       margin-left: auto;
       margin-right: auto;
     }
 
-    .hero-buttons {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 3rem;
+    .hero-role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: stretch;
     }
 
-    .hero .btn {
-      padding: 15px 35px;
-      font-size: 16px;
-      border-radius: 10px;
+    .hero-role-card {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(238, 243, 255, 0.94));
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 18px;
+      padding: 2rem;
+      color: var(--text-dark);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 260px;
+    }
+
+    .hero-role-icon {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--royal-blue), var(--royal-blue-light));
+      color: white;
+      margin-bottom: 1rem;
+      box-shadow: 0 10px 20px rgba(65, 105, 225, 0.2);
+    }
+
+    .hero-role-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .hero-role-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.6rem;
+      color: var(--royal-blue);
+    }
+
+    .hero-role-card p {
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+      color: var(--text-light);
+      opacity: 1;
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .hero-role-card .btn {
+      width: 100%;
+      text-align: center;
+      padding: 12px 16px;
     }
 
     /* Features Section */
@@ -217,26 +285,11 @@
       padding: 3rem 2rem;
     }
 
-    .role-section h2 {
-      text-align: center;
-      color: white;
-      margin-bottom: 2rem;
-      font-size: 2rem;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .role-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-bottom: 3rem;
-    }
-
     .role-card {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       border-radius: 16px;
-      padding: 2.5rem;
+      padding: 2rem;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -256,30 +309,19 @@
 
     .role-card h3 {
       color: var(--royal-blue);
-      margin-bottom: 1rem;
-      font-size: 1.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 1.4rem;
     }
 
     .role-card p {
       color: var(--text-light);
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       line-height: 1.6;
       font-size: 0.95rem;
     }
 
     .role-card .btn {
       width: 100%;
-      margin-bottom: 0.5rem;
-    }
-
-    .btn-tertiary {
-      background: transparent;
-      color: var(--royal-blue);
-      border: 2px solid var(--royal-blue);
-    }
-
-    .btn-tertiary:hover {
-      background: var(--moonlight-light);
     }
 
     /* Footer */
@@ -321,7 +363,6 @@
       }
     }
 
-    /* Dark Mode Support */
     body.dark-mode {
       background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     }
@@ -331,17 +372,21 @@
     }
 
     body.dark-mode .features,
-    body.dark-mode .role-card {
+    body.dark-mode .role-card,
+    body.dark-mode .hero-role-card {
       background: rgba(40, 40, 50, 0.95);
       color: #e0e0e0;
     }
 
-    body.dark-mode .hero h1,
-    body.dark-mode .role-section h2 {
+    body.dark-mode .hero h1 {
       color: #e0e0e0;
     }
 
-    body.dark-mode .hero p {
+    body.dark-mode .hero p,
+    body.dark-mode .hero-role-card p,
+    body.dark-mode .feature-card p,
+    body.dark-mode .role-card p,
+    body.dark-mode footer {
       color: #b0b0b0;
     }
 
@@ -356,7 +401,6 @@
 
     body.dark-mode footer {
       background: rgba(30, 30, 40, 0.95);
-      color: #b0b0b0;
     }
   </style>
 </head>
@@ -368,7 +412,19 @@
         <div class="logo-text">SAHAYA</div>
       </div>
       <div class="nav-buttons">
-        <button class="theme-toggle" id="themeToggle">🌙</button>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v2"></path>
+            <path d="M12 19v2"></path>
+            <path d="M4.2 4.2l1.4 1.4"></path>
+            <path d="M18.4 18.4l1.4 1.4"></path>
+            <path d="M1 12h2"></path>
+            <path d="M21 12h2"></path>
+            <path d="M4.2 19.8l1.4-1.4"></path>
+            <path d="M18.4 5.6l1.4-1.4"></path>
+            <circle cx="12" cy="12" r="4.5"></circle>
+          </svg>
+        </button>
       </div>
     </nav>
   </header>
@@ -376,12 +432,24 @@
   <main>
     <!-- Hero Section -->
     <section class="hero">
-      <h1>Professional Service Platform</h1>
-      <p>Connect with trusted service providers or offer your expertise to earn. Simple, secure, and professional.</p>
-      <div class="hero-buttons">
-        <a href="/user-login.html" class="btn btn-primary">Access as User</a>
-        <a href="/provider-login.html" class="btn btn-primary">Access as Provider</a>
-        <a href="/admin-login.html" class="btn btn-secondary">Admin Access</a>
+      <h1>Find trusted help in minutes</h1>
+      <p>Book verified experts, manage appointments and access secure services tailored to your needs.</p>
+      <div class="hero-role-grid">
+        <div class="hero-role-card">
+          <h3>USER</h3>
+          <p>Find service professionals, compare options and book with confidence.</p>
+          <a href="/user-login.html" class="btn btn-primary">Access as User</a>
+        </div>
+        <div class="hero-role-card">
+          <h3>PROVIDER</h3>
+          <p>Showcase your skills, receive bookings and manage your work efficiently.</p>
+          <a href="/provider-login.html" class="btn btn-primary">Access as Provider</a>
+        </div>
+        <div class="hero-role-card">
+          <h3>ADMIN</h3>
+          <p>Oversee platform activity, monitor users, and keep operations running smoothly.</p>
+          <a href="/admin-login.html" class="btn btn-primary">Access as Admin</a>
+        </div>
       </div>
     </section>
 
@@ -390,60 +458,32 @@
       <h2>Platform Features</h2>
       <div class="feature-grid">
         <div class="feature-card">
-          <h3>📋 Easy Booking</h3>
+          <h3>EASY BOOKINGS</h3>
           <p>Browse and book services in minutes with our intuitive interface.</p>
         </div>
         <div class="feature-card">
-          <h3>💰 Secure Payments</h3>
+          <h3>SECURE PAYMENTS</h3>
           <p>Multiple payment options with complete transaction security.</p>
         </div>
         <div class="feature-card">
-          <h3>⭐ Reviews & Ratings</h3>
+          <h3>REVIEWS & RATINGS</h3>
           <p>Transparent reviews to build trust within the community.</p>
         </div>
         <div class="feature-card">
-          <h3>💬 Direct Chat</h3>
+          <h3>DIRECT COMMUNICATION</h3>
           <p>Communicate directly with service providers before booking.</p>
         </div>
         <div class="feature-card">
-          <h3>📊 Earnings Tracking</h3>
+          <h3>TRACK EARNINGS</h3>
           <p>Providers can track earnings and performance analytics.</p>
         </div>
         <div class="feature-card">
-          <h3>🔒 Secure & Safe</h3>
+          <h3>SECURE & SAFE</h3>
           <p>Your data and transactions are protected with industry standards.</p>
         </div>
       </div>
     </section>
 
-    <!-- Role Selection -->
-    <section class="role-section">
-      <h2>Get Started</h2>
-      <div class="role-grid">
-        <div class="role-card">
-          <div class="role-icon">👤</div>
-          <h3>I'm a User</h3>
-          <p>Looking for professional services? Browse, book, and pay securely with our platform.</p>
-          <a href="/user-signup.html" class="btn btn-primary">Create Account</a>
-          <a href="/user-login.html" class="btn btn-tertiary">Sign In</a>
-        </div>
-
-        <div class="role-card">
-          <div class="role-icon">👨‍💼</div>
-          <h3>I'm a Provider</h3>
-          <p>Offer your services and connect with clients. Start earning immediately.</p>
-          <a href="/provider-signup.html" class="btn btn-primary">Register as Provider</a>
-          <a href="/provider-login.html" class="btn btn-tertiary">Sign In</a>
-        </div>
-
-        <div class="role-card">
-          <div class="role-icon">👑</div>
-          <h3>Platform Admin</h3>
-          <p>Manage the platform, users, and ensure smooth operations.</p>
-          <a href="/admin-login.html" class="btn btn-primary">Admin Portal</a>
-        </div>
-      </div>
-    </section>
   </main>
 
   <footer>
@@ -451,22 +491,5 @@
   </footer>
 
   <script src="auth-handler.js"></script>
-  <script>
-    // Check if already logged in and redirect
-    document.addEventListener('DOMContentLoaded', function() {
-      const token = localStorage.getItem('token');
-      const userType = localStorage.getItem('userType');
-
-      if (token && userType) {
-        if (userType === 'user') {
-          window.location.href = '/find-service.html';
-        } else if (userType === 'provider') {
-          window.location.href = '/dashboard2.html';
-        } else if (userType === 'admin') {
-          window.location.href = '/admin-panel.html';
-        }
-      }
-    });
-  </script>
 </body>
 </html>

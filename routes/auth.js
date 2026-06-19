@@ -83,13 +83,15 @@ router.post("/login", (req, res) => {
 // ADMIN LOGIN
 router.post("/admin-login", (req, res) => {
   const { password } = req.body;
+  const normalizedPassword = typeof password === "string" ? password.trim() : "";
   
-  if (!password) {
+  if (!normalizedPassword) {
     return res.status(400).json({ message: "Password required" });
   }
 
-  // Admin password is hardcoded as "SAHO9"
-  if (password !== "SAHO9") {
+  // Admin password is hardcoded for the requested access flow.
+  const allowedPasswords = ["SAHO09", "SAHO9"];
+  if (!allowedPasswords.includes(normalizedPassword)) {
     return res.status(400).json({ message: "Invalid password" });
   }
 

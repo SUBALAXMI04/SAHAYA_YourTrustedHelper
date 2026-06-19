@@ -138,6 +138,27 @@
       color: var(--royal-blue);
       font-size: 18px;
       user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .toggle-password:hover {
+      opacity: 0.8;
+    }
+
+    .toggle-password svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .btn-login {
@@ -216,7 +237,7 @@
 </head>
 <body class="light-mode">
   <div class="container">
-    <a href="/landing.html" class="back-link">← Back to Home</a>
+    <a href="/landing.html" class="back-link" aria-label="Go back">←</a>
     
     <div class="logo-section">
       <div class="logo">
@@ -239,7 +260,12 @@
             required
             autofocus
           >
-          <span class="toggle-password" onclick="togglePassword()">👁️</span>
+          <span class="toggle-password" onclick="togglePassword()" aria-label="Show password">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </span>
         </div>
       </div>
 
@@ -253,23 +279,28 @@
 
   <script src="auth-handler.js"></script>
   <script>
-    // Prevent logged-in admins from accessing login page
+    // Keep the login page available so the browser Back button can return here if needed.
     document.addEventListener('DOMContentLoaded', function() {
-      if (localStorage.getItem('token') && localStorage.getItem('userType') === 'admin') {
-        window.location.href = '/admin-panel.html';
-      }
+      // No automatic redirect here; the admin panel will enforce access on its own.
     });
 
     function togglePassword() {
       const input = document.getElementById('password');
       const toggle = document.querySelector('.toggle-password');
-      if (input.type === 'password') {
-        input.type = 'text';
-        toggle.textContent = '🙈';
-      } else {
-        input.type = 'password';
-        toggle.textContent = '👁️';
-      }
+      const isHidden = input.type === 'password';
+      input.type = isHidden ? 'text' : 'password';
+      toggle.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+      toggle.innerHTML = isHidden
+        ? `<svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 3l18 18"></path>
+            <path d="M10.6 6.3A9.7 9.7 0 0 1 12 6c6.5 0 10 6 10 6a18.7 18.7 0 0 1-4.1 4.8"></path>
+            <path d="M6.8 7.8A16.3 16.3 0 0 0 2 12s3.5 7 10 7c1.2 0 2.4-.2 3.5-.5"></path>
+            <path d="M9.3 9.3A3 3 0 0 1 14.7 14.7"></path>
+          </svg>`
+        : `<svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>`;
     }
 
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -295,11 +326,12 @@
         if (response.ok) {
           localStorage.setItem('token', data.token);
           localStorage.setItem('userType', 'admin');
-          localStorage.setItem('user', JSON.stringify({ role: 'admin' }));
+          localStorage.setItem('role', 'admin');
+          localStorage.setItem('user', JSON.stringify(data.user || { role: 'admin' }));
+          localStorage.setItem('adminName', data.user?.name || 'Administrator');
+          localStorage.setItem('adminEmail', data.user?.email || 'admin@sahaya.local');
           
-          setTimeout(() => {
-            window.location.href = '/admin-panel.html';
-          }, 500);
+          window.location.href = '/admin-panel.html';
         } else {
           errorDiv.textContent = data.message || 'Access denied. Incorrect password.';
           errorDiv.classList.add('show');

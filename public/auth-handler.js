@@ -131,9 +131,27 @@ function toggleTheme() {
 
 function updateThemeButtonIcon(theme) {
   const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    themeToggle.innerHTML = theme === 'light' ? '🌙' : '☀️';
-  }
+  if (!themeToggle) return;
+
+  const lightIcon = `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3v2"></path>
+      <path d="M12 19v2"></path>
+      <path d="M4.2 4.2l1.4 1.4"></path>
+      <path d="M18.4 18.4l1.4 1.4"></path>
+      <path d="M1 12h2"></path>
+      <path d="M21 12h2"></path>
+      <path d="M4.2 19.8l1.4-1.4"></path>
+      <path d="M18.4 5.6l1.4-1.4"></path>
+      <circle cx="12" cy="12" r="4.5"></circle>
+    </svg>`;
+
+  const darkIcon = `
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+    </svg>`;
+
+  themeToggle.innerHTML = theme === 'light' ? darkIcon : lightIcon;
 }
 
 // Initialize on page load

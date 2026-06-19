@@ -15,11 +15,57 @@ const notificationsRoutes = require("./routes/notifications");
 const savedProfessionalsRoutes = require("./routes/saved-professionals");
 
 const app = express();
+const publicDir = path.join(__dirname, "public");
+const themeBootstrap = `
+<script>
+  (function () {
+    try {
+      const saved = localStorage.getItem('theme');
+      const theme = saved || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.colorScheme = theme;
+      if (theme === 'dark') {
+        document.body?.classList.add('dark-mode');
+        document.body?.classList.remove('light-mode');
+      } else {
+        document.body?.classList.add('light-mode');
+        document.body?.classList.remove('dark-mode');
+      }
+    } catch (e) {}
+  })();
+</script>`;
+
 app.use(cors());
 app.use(express.json());
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, "public")));
+app.use((req, res, next) => {
+  const originalSend = res.send.bind(res);
+
+  res.send = function (body) {
+    if (typeof body === 'string' && body.includes('<html') && body.includes('</head>')) {
+      body = body.replace('</head>', `${themeBootstrap}</head>`);
+    }
+    return originalSend(body);
+  };
+
+  next();
+});
+
+// Explicit frontend routes so the root page and admin entry point are clear
+app.get("/", (req, res) => {
+  res.sendFile(path.join(publicDir, "landing.html"));
+});
+
+app.get("/home", (req, res) => {
+  res.sendFile(path.join(publicDir, "landing.html"));
+});
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(publicDir, "admin-login.html"));
+});
+
+// Serve remaining frontend files
+app.use(express.static(publicDir));
 
 // Use routes
 app.use("/auth", authRoutes);

@@ -464,15 +464,17 @@
     // CHECK AUTHENTICATION
     function checkAuth() {
       const token = localStorage.getItem('token');
+      const userType = localStorage.getItem('userType');
       const role = localStorage.getItem('role');
+      const isAdmin = userType === 'admin' || role === 'admin';
       
-      if (!token || role !== 'admin') {
-        window.location.href = '/admin-login.html';
+      if (!token || !isAdmin) {
+        window.location.replace('/admin-login.html');
         return;
       }
 
-      document.getElementById('adminName').textContent = localStorage.getItem('adminName') || 'Admin User';
-      document.getElementById('adminEmail').textContent = localStorage.getItem('adminEmail') || 'admin@sahaya.com';
+      document.getElementById('adminName').textContent = localStorage.getItem('adminName') || 'Administrator';
+      document.getElementById('adminEmail').textContent = localStorage.getItem('adminEmail') || 'admin@sahaya.local';
     }
 
     async function switchTab(tabName) {
@@ -648,7 +650,11 @@
     }
 
     function logout() {
+      const savedTheme = localStorage.getItem('theme');
       localStorage.clear();
+      if (savedTheme) {
+        localStorage.setItem('theme', savedTheme);
+      }
       window.location.href = '/landing.html';
     }
 
@@ -656,9 +662,11 @@
     document.addEventListener('DOMContentLoaded', function() {
       const token = localStorage.getItem('token');
       const userType = localStorage.getItem('userType');
+      const role = localStorage.getItem('role');
+      const isAdmin = userType === 'admin' || role === 'admin';
 
-      if (!token || userType !== 'admin') {
-        window.location.href = '/landing.html';
+      if (!token || !isAdmin) {
+        window.location.replace('/admin-login.html');
         return;
       }
 

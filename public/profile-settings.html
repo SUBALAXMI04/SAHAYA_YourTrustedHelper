@@ -634,7 +634,11 @@
     }
 
     function logout() {
+      const savedTheme = localStorage.getItem('theme');
       localStorage.clear();
+      if (savedTheme) {
+        localStorage.setItem('theme', savedTheme);
+      }
       window.location.href = '/user-login.html';
     }
 

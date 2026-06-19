@@ -496,7 +496,11 @@
 
     function logout() {
       if (confirm('Are you sure you want to logout?')) {
+        const savedTheme = localStorage.getItem('theme');
         localStorage.clear();
+        if (savedTheme) {
+          localStorage.setItem('theme', savedTheme);
+        }
         window.location.href = '/landing.html';
       }
     }
